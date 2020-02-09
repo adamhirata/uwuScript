@@ -13,8 +13,8 @@ uwuScript is a cute scripting language that is designed to be fun (and possibly 
 * List Comprehansion
 * For/While Loops
 
-##Code Exampes
-###factorial
+## Code Exampes
+### factorial
 <pre><code>
 Numbwer factorial (Numbwer n) uwu
   if (n == 1)  uwu retwurn 1
