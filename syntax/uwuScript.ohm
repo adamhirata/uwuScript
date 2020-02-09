@@ -3,8 +3,8 @@ uwuScript {
     Statement   = SimpleStmt newline+												-- simple
                 | "wile" "(" Exp ")" Block                                                  -- while
                 | "if" "(" Exp ")" Block
-                  ("else if" "(" Exp ")" Block)*
-                  ("else" Block)?                                                   -- if                        
+                  ("ewse if" "(" Exp ")" Block)*
+                  ("ewse" Block)?                                                   -- if                        
                 | "fow" id "in" Exp"..."Exp Block                                   -- for
                 | Exp "?" Exp "ewse" Exp                                            -- ternary
                 | (Type | "void") id "(" Params ")" Block                           -- funcdec
@@ -14,8 +14,8 @@ uwuScript {
                 | "retuwn" Exp?                                                     -- return
                 | Call                                                              -- call
                 | Exp
-    Block       = "uwu" newline? SimpleStmt dedent? newline						-- tiny
-                | "uwu" newline Statement+ dedent?       						    -- large
+    Block       = "uwu" SimpleStmt? "owo" newline*			                            -- tiny
+                | "uwu" newline Statement* "owo" newline*   						    -- large
     Exp         = Exp "||" Exp1														-- or
                 | Exp "&&" Exp1														-- and
                 | Exp1															
@@ -36,7 +36,7 @@ uwuScript {
                 | "(" Exp ")"                                                       -- parens
                 | Call                                                              -- call
                 | VarExp
-    keyword     = ("uwu" | "?" | "wile" | "if" | "ewse" | "twue" | "fawse" | "retuwn" | "bweak" | "fow" | "||" | "&&" | "in" | "void" ) ~idrest
+    keyword     = ("uwu" | "owo" | "?" | "wile" | "if" | "ewse" | "twue" | "fawse" | "retuwn" | "bweak" | "fow" | "null" | "||" | "&&" | "in" | "void" ) ~idrest
     id          = ~keyword ("_" | letter) idrest*
     idrest      =  "_" | alnum
     numlit      = digit+ ("." digit)? digit*
@@ -59,16 +59,16 @@ uwuScript {
     ArrayType   = "Awway<" Type ">" | "Aww<" Type ">"
     DictType    = "Dict<" Type "to" Type ">" | "Dictionawy<" Type "to" Type ">"
     KeyValPair  = Exp "to" Exp
-    indent      = "uwu" | "⇨"
-    dedent      = "owo" | "⇦"
+    indent      = "⇨"
+    dedent      = "⇦"
     addop       =  "+" | "-"
     relop       =  "==" | "!=" | "<=" | "<" |  ">=" | ">" 
     mulop       =  "*" |  "/" | "%"
-    prefixop    =  "!"
+    prefixop    =  "!" | "-"
     newline     = "\n"+
     space      	:=  " " | "\t" | comment
     escape      = "\\" ("\\" | "n" | "\"")											-- simple
                 | "\\u{" hexDigit+ "}"												-- codepoint
-    comment     = "(*≧ω≦*)" (~"\n" any)*										   -- single
+    comment     = ("(*≧ω≦*)" | "(づ ◕‿◕ )づ" | "(ﾉﾟ▽ﾟ)ﾉ") (~"\n" any)*										   -- single
                 | "(╯°益°)╯彡┻━┻" (~"┬─┬ノ( º _ ºノ)" any)* "┬─┬ノ( º _ ºノ)"   	 -- multi
 }
