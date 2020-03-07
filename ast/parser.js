@@ -8,13 +8,6 @@ const fs = require("fs");
 
 const {
   Program,
-  Block,
-  IntType,
-  BoolType,
-  VariableDeclaration,
-  AssignmentStatement,
-  ReadStatement,
-  WriteStatement,
   WhileStatement,
   IntegerLiteral,
   BooleanLiteral,
@@ -25,61 +18,53 @@ const {
 
 const grammar = ohm.grammar(fs.readFileSync("./grammar/uwuScript.ohm"));
 
+function arrayToNullable(a) {
+  return a.length === 0 ? null : a[0];
+}
+
 /* eslint-disable no-unused-vars */
 const astBuilder = grammar.createSemantics().addOperation("ast", {
-  Program(b) {
+  Program(_1, b, _2) {
     return new Program(b.ast());
   },
-  Block(s, _) {
-    return new Block(s.ast());
+  Statement_simple(statement, _n) {
+    return statement.ast();
   },
-  Stmt_declaration(_1, id, _2, type) {
-    return new VariableDeclaration(id.sourceString, type.ast());
+  Statement_wile(_w, _p1, test, _p2, block) {
+    return new WhileStatement(test.ast(), block.ast());
   },
-  Stmt_assignment(varexp, _, exp) {
-    return new AssignmentStatement(varexp.ast(), exp.ast());
+  Statement_if(
+    _i,
+    _p1,
+    firstTest,
+    _p2,
+    firstBlock,
+    _ei,
+    _p3,
+    moreTests,
+    moreBlocks,
+    _p4,
+    _e,
+    lastBlock
+  ) {
+    const tests = [firstTest.ast(), ...moreTests.ast()];
+    const consquents = [firstBlock.ast(), ...moreBlocks.ast()];
+    const alternate = arrayToNullable(lastBlock.ast());
+    return new IfStatement(tests, consequents, alternate);
   },
-  Stmt_read(_1, v, _2, more) {
-    return new ReadStatement([v.ast(), ...more.ast()]);
+  Statement_for(_f, _id, _in, test1, _1, test2, block) {
+    return new ForStatement(test1.ast(), test2.ast(), block.ast());
   },
-  Stmt_write(_1, e, _2, more) {
-    return new WriteStatement([e.ast(), ...more.ast()]);
+  Statement_ternary(test1, _q, test2, _e, test3) {
+    return new TernaryStatement(test1.ast(), test2.ast(), test3.ast());
   },
-  Stmt_while(_1, e, _2, b, _3) {
-    return new WhileStatement(e.ast(), b.ast());
-  },
-  Type(typeName) {
-    return typeName.sourceString === "int" ? IntType : BoolType;
-  },
-  Exp_binary(e1, _, e2) {
-    return new BinaryExpression("or", e1.ast(), e2.ast());
-  },
-  Exp1_binary(e1, _, e2) {
-    return new BinaryExpression("and", e1.ast(), e2.ast());
-  },
-  Exp2_binary(e1, op, e2) {
-    return new BinaryExpression(op.sourceString, e1.ast(), e2.ast());
-  },
-  Exp3_binary(e1, op, e2) {
-    return new BinaryExpression(op.sourceString, e1.ast(), e2.ast());
-  },
-  Exp4_binary(e1, op, e2) {
-    return new BinaryExpression(op.sourceString, e1.ast(), e2.ast());
-  },
-  Exp5_unary(op, e) {
-    return new UnaryExpression(op.sourceString, e.ast());
-  },
-  Exp6_parens(_1, e, _2) {
-    return e.ast();
-  },
-  boollit(_) {
-    return new BooleanLiteral(this.sourceString === "true");
-  },
-  intlit(_) {
-    return new IntegerLiteral(this.sourceString);
-  },
-  VarExp(_) {
-    return new VariableExpression(this.sourceString);
+  Statement_funcDec(type, id, _p1, params, _p2, block) {
+    return new FunctionDeclaration(
+      type.ast(),
+      id.ast(),
+      params.ast(),
+      block.ast()
+    );
   }
 });
 /* eslint-enable no-unused-vars */
