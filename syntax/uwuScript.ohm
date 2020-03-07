@@ -1,7 +1,7 @@
 uwuScript {
     Program     = newline* Statement+ newline*
-    Statement   = SimpleStmt newline+												-- simple
-                | "wile" "(" Exp ")" Block                                                  -- while
+    Statement   = SimpleStmt newline+												                        -- simple
+                | "wile" "(" Exp ")" Block                                          -- while
                 | "if" "(" Exp ")" Block
                   ("ewse if" "(" Exp ")" Block)*
                   ("ewse" Block)?                                                   -- if                        
@@ -15,17 +15,17 @@ uwuScript {
                 | Call                                                              -- call
                 | Exp
     Block       = "uwu" SimpleStmt? "owo" newline*			                            -- tiny
-                | "uwu" newline Statement* "owo" newline*   						    -- large
-    Exp         = Exp "||" Exp1														-- or
-                | Exp "&&" Exp1														-- and
+                | "uwu" newline Statement* "owo" newline*   						            -- large
+    Exp         = Exp "||" Exp1														                          -- or
+                | Exp "&&" Exp1														                          -- and
                 | Exp1															
-    Exp1        = Exp2 relop Exp2													-- binary
+    Exp1        = Exp2 relop Exp2													                          -- binary
                 | Exp2
-    Exp2        = Exp2 addop Exp3													-- binary
+    Exp2        = Exp2 addop Exp3													                          -- binary
                 | Exp3
-    Exp3        = Exp3 mulop Exp4													-- binary
+    Exp3        = Exp3 mulop Exp4													                          -- binary
                 | Exp4
-    Exp4        = prefixop Exp5														-- unary
+    Exp4        = prefixop Exp5														                          -- unary
                 | Exp5
     Exp5        = numlit
                 | boollit  
@@ -44,7 +44,7 @@ uwuScript {
     strlit      = "\"" (~"\\" ~"\"" ~"\n" any | escape)* "\""
     nulllit     = "null" 
     Call        = VarExp "(" Args ")" 
-    Param		= Type id ("=" Exp)?
+    Param		    = Type id ("=" Exp)?
     Params      = ListOf<Param, ",">
     Arg         = (id ":")? Exp
     Args        = ListOf<Arg, ",">
@@ -67,8 +67,8 @@ uwuScript {
     prefixop    =  "!" | "-"
     newline     = "\n"+
     space      	:=  " " | "\t" | comment
-    escape      = "\\" ("\\" | "n" | "\"")											-- simple
-                | "\\u{" hexDigit+ "}"												-- codepoint
-    comment     = ("(*≧ω≦*)" | "(づ ◕‿◕ )づ" | "(ﾉﾟ▽ﾟ)ﾉ") (~"\n" any)*										   -- single
-                | "(╯°益°)╯彡┻━┻" (~"┬─┬ノ( º _ ºノ)" any)* "┬─┬ノ( º _ ºノ)"   	 -- multi
+    escape      = "\\" ("\\" | "n" | "\"")											                    -- simple
+                | "\\u{" hexDigit+ "}"												                      -- codepoint
+    comment     = ("(*≧ω≦*)" | "(づ ◕‿◕ )づ" | "(ﾉﾟ▽ﾟ)ﾉ") (~"\n" any)*						-- single
+                | "(╯°益°)╯彡┻━┻" (~"┬─┬ノ( º _ ºノ)" any)* "┬─┬ノ( º _ ºノ)"   	   -- multi
 }
