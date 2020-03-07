@@ -1,6 +1,0 @@
-Program {
-  statements:
-   [ Call {
-       callee: IdentifierExpression { id: 'print' },
-       args:
-        [ Argument { id: null, expression: StringLiteral { value: '"hello"' } } ] } ] }
