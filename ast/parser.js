@@ -7,23 +7,30 @@ const ohm = require("ohm-js");
 const fs = require("fs");
 
 const {
-  Program,
-  Block,
-  IntType,
-  BoolType,
-  VariableDeclaration,
+  Argument,
   AssignmentStatement,
-  ReadStatement,
-  WriteStatement,
-  WhileStatement,
-  IntegerLiteral,
-  BooleanLiteral,
-  VariableExpression,
   BinaryExpression,
-  UnaryExpression
+  BooleanLiteral,
+  BreakStatement,
+  Call,
+  FunctionDeclaration,
+  FunctionObject,
+  IdentifierExpression,
+  IfStatement,
+  ListExpression,
+  NumericLiteral,
+  Parameter,
+  Program,
+  ReturnStatement,
+  StringLiteral,
+  SubscriptedExpression,
+  UnaryExpression,
+  VariableDeclaration,
+  Variable,
+  WhileStatement
 } = require(".");
 
-const grammar = ohm.grammar(fs.readFileSync("./grammar/uwuScript.ohm"));
+const grammar = ohm.grammar(fs.readFileSync("./syntax/uwuScript.ohm"));
 
 /* eslint-disable no-unused-vars */
 const astBuilder = grammar.createSemantics().addOperation("ast", {
