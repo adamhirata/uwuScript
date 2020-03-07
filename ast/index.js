@@ -55,6 +55,12 @@ class IfStatement {
   }
 }
 
+class LargeBlock {
+  constructor(statements) {
+    this.statements = statements;
+  }
+}
+
 class ListExpression {
   constructor(members) {
     this.members = members;
@@ -97,14 +103,20 @@ class SubscriptedExpression {
   }
 }
 
+class TinyBlock {
+  constructor(simpleStmt) {
+    this.simpleStmt = simpleStmt;
+  }
+}
+
 class UnaryExpression {
   constructor(op, operand) {
     Object.assign(this, { op, operand });
   }
 }
 class VariableDeclaration {
-  constructor(ids, initializers) {
-    Object.assign(this, { ids, initializers });
+  constructor(type, ids, initializers) {
+    Object.assign(this, { type, ids, initializers });
   }
 }
 
@@ -131,6 +143,7 @@ module.exports = {
   FunctionObject,
   IdentifierExpression,
   IfStatement,
+  LargeBlock,
   ListExpression,
   NumericLiteral,
   Parameter,
@@ -138,6 +151,7 @@ module.exports = {
   ReturnStatement,
   StringLiteral,
   SubscriptedExpression,
+  TinyBlock,
   UnaryExpression,
   VariableDeclaration,
   Variable,

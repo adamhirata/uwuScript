@@ -12,7 +12,7 @@ uwuScript {
                 | VarExp "=" Exps                                                   -- assignment
                 | "bweak"                                                           -- break
                 | "retuwn" Exp?                                                     -- return
-                | Call                                                              -- call
+                | Call
                 | Exp
     Block       = "uwu" SimpleStmt? "owo" newline*			                            -- tiny
                 | "uwu" newline Statement* "owo" newline*   						            -- large
@@ -34,7 +34,7 @@ uwuScript {
                 | "[" ListOf<Exp, ","> "]"                                          -- array
                 | "{" ListOf<KeyValPair, ","> "}"                                   -- dictionary
                 | "(" Exp ")"                                                       -- parens
-                | Call                                                              -- call
+                | Call
                 | VarExp
     keyword     = ("uwu" | "owo" | "?" | "wile" | "if" | "ewse" | "twue" | "fawse" | "retuwn" | "bweak" | "fow" | "null" | "||" | "&&" | "in" | "void" ) ~idrest
     id          = ~keyword ("_" | letter) idrest*
@@ -43,7 +43,7 @@ uwuScript {
     boollit     = "twue" | "fawse"
     strlit      = "\"" (~"\\" ~"\"" ~"\n" any | escape)* "\""
     nulllit     = "null" 
-    Call        = VarExp "(" Args ")" 
+    Call        = VarExp "(" Args ")"
     Param		    = Type id ("=" Exp)?
     Params      = ListOf<Param, ",">
     Arg         = (id ":")? Exp

@@ -79,6 +79,66 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
       params.ast(),
       block.ast()
     );
+  },
+  SimpleStmt_vardec(type, id, _e, exp) {
+    return new VariableDeclaration(type.ast(), id.ast(), exp.ast());
+  },
+  SimpleStmt_assignment(varexp, _e, exps) {
+    return new AssignmentStatement(varexp.ast(), exps.ast());
+  },
+  SimpleStmt_break(_b) {
+    return new BreakStatement();
+  },
+  SimpleStmt_return(_r, val) {
+    return new ReturnStatement(val.ast());
+  },
+  Block_tiny(_u, ss, _o, nl) {
+    return new TinyBlock(ss.ast());
+  },
+  Block_large(_u, nl, stmts, _o, nl1) {
+    return new LargeBlock(stmts.ast());
+  },
+  Exp_or(e, _o, e1) {
+    return new BinaryExpression("||", e.ast(), e1.ast());
+  },
+  Exp_and(e, _o, e1) {
+    return new BinaryExpression("&&", e.ast(), e1.ast());
+  },
+  Exp1_binary(e1, op, e2) {
+    return new BinaryExpression(op.sourceString, e1.ast(), e2.ast());
+  },
+  Exp2_binary(e2, op, e3) {
+    return new BinaryExpression(op.sourceString, e2.ast(), e3.ast());
+  },
+  Exp3_binary(e3, op, e4) {
+    return new BinaryExpression(op.sourceString, e3.ast(), e4.ast());
+  },
+  Exp4_unary(op, e4) {
+    return new UnaryExpression(op.sourceString, e4.ast());
+  },
+  Exp5_array(_b, list, _b2) {
+    return new ListExpression(list.ast());
+  },
+  Exp5_dictionary(_b, list, _b2) {
+    return new ListExpression(list.ast());
+  },
+  Call(varexp, _p, args, _p1) {
+    return new Call(varexp.ast(), args.ast());
+  },
+  VarExp_subscripted(v, _b1, e, _b2) {
+    return new SubscriptedExpression(v.ast(), e.ast());
+  },
+  VarExp_simple(id) {
+    return new IdentifierExpression(id.ast());
+  },
+  numlit(_d, _p, _d1, _d2) {
+    return new NumericLiteral(+this.sourceString);
+  },
+  boollit(_val) {
+    return new BooleanLiteral(this.sourceString);
+  },
+  strlit(_q, _chars, _q1) {
+    return new StringLiteral(this.sourceString);
   }
 });
 /* eslint-enable no-unused-vars */

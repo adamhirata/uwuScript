@@ -14,6 +14,7 @@ const {
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
+  Block,
   BreakStatement,
   Call,
   FunctionDeclaration,
