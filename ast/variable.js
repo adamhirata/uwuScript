@@ -1,9 +1,10 @@
 module.exports = class Variable {
-  constructor(id) {
-    this.id = id;
+  constructor(type, id) {
+    Object.assign(this, { type, id });
   }
 
-  analyze(/* context */) { // eslint-disable-line class-methods-use-this
+  analyze(/* context */) {
+    // eslint-disable-line class-methods-use-this
     // Someday we'll have types and we can do something here...
   }
 

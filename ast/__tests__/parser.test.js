@@ -10,20 +10,27 @@
 const parse = require("../parser");
 
 const {
-  Program,
-  Block,
-  VariableDeclaration,
-  IntType,
-  BoolType,
+  Argument,
   AssignmentStatement,
-  ReadStatement,
-  WriteStatement,
-  WhileStatement,
+  BinaryExpression,
   BooleanLiteral,
-  IntegerLiteral,
-  VariableExpression,
+  BreakStatement,
+  Call,
+  FunctionDeclaration,
+  FunctionObject,
+  IdentifierExpression,
+  IfStatement,
+  ListExpression,
+  NumericLiteral,
+  Parameter,
+  Program,
+  ReturnStatement,
+  StringLiteral,
+  SubscriptedExpression,
   UnaryExpression,
-  BinaryExpression
+  VariableDeclaration,
+  Variable,
+  WhileStatement
 } = require("..");
 
 const fixture = {
