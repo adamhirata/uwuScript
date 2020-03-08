@@ -19,8 +19,12 @@ const {
   BooleanType,
   BreakStatement,
   Call,
+  DictionaryExpression,
+  DictionaryType,
+  ForStatement,
   FunctionDeclaration,
   IfStatement,
+  KeyValPair,
   LargeBlock,
   NumericLiteral,
   NumType,
@@ -31,6 +35,7 @@ const {
   StringType,
   SubscriptedExpression,
   TinyBlock,
+  TernaryStatement,
   UnaryExpression,
   VariableDeclaration,
   Variable,
@@ -69,13 +74,124 @@ const fixture = {
     Awway<Stwing> arr = [test]
     print(arr[1])
     `,
-    new Program([])
+    new Program([
+      new VariableDeclaration(StringType, "test", new StringLiteral('"test"')),
+      new AssignmentStatement(new Variable("test"), new StringLiteral('"oof"')),
+      new VariableDeclaration(
+        new ArrayType(StringType),
+        "arr",
+        new ArrayExpression([new Variable("test")])
+      ),
+      new Call(new Variable("print"), [
+        new Argument(
+          [],
+          new SubscriptedExpression(new Variable("arr"), new NumericLiteral(1))
+        )
+      ])
+    ])
+  ],
+  boolsAndOpsAndBlocks: [
+    String.raw`Boowean test = fawse
+    wile (!(test)) uwu
+      bweak
+    owo
+    if (test) uwu owo ewse if (test) uwu owo
+    ewse uwu owo
+    fow i in 0...10 uwu Boowean boo = 2 == 3 owo
+    Numbwer j = 1 + 2
+    Numbwer k = 1 * 2
+    Boow boo = twue || fawse
+    Boow test = twue && fawse
+    test ? yay ewse boo
+    `,
+    new Program([
+      new VariableDeclaration(BooleanType, "test", new BooleanLiteral("fawse")),
+      new WhileStatement(
+        new UnaryExpression("!", new Variable("test")),
+        new LargeBlock([new BreakStatement()])
+      ),
+      new IfStatement(
+        [new Variable("test"), new Variable("test")],
+        [new TinyBlock([]), new TinyBlock([])],
+        new TinyBlock([])
+      ),
+      new ForStatement(
+        "i",
+        new NumericLiteral(0),
+        new NumericLiteral(10),
+        new TinyBlock([
+          new VariableDeclaration(
+            BooleanType,
+            "boo",
+            new BinaryExpression(
+              "==",
+              new NumericLiteral(2),
+              new NumericLiteral(3)
+            )
+          )
+        ])
+      ),
+      new VariableDeclaration(
+        NumType,
+        "j",
+        new BinaryExpression("+", new NumericLiteral(1), new NumericLiteral(2))
+      ),
+      new VariableDeclaration(
+        NumType,
+        "k",
+        new BinaryExpression("*", new NumericLiteral(1), new NumericLiteral(2))
+      ),
+      new VariableDeclaration(
+        BooleanType,
+        "boo",
+        new BinaryExpression(
+          "||",
+          new BooleanLiteral("twue"),
+          new BooleanLiteral("fawse")
+        )
+      ),
+      new VariableDeclaration(
+        BooleanType,
+        "test",
+        new BinaryExpression(
+          "&&",
+          new BooleanLiteral("twue"),
+          new BooleanLiteral("fawse")
+        )
+      ),
+      new TernaryStatement(
+        new Variable("test"),
+        new Variable("yay"),
+        new Variable("boo")
+      )
+    ])
+  ],
+  emptyList: [
+    String.raw`print()
+  `,
+    new Program([new Call(new Variable("print"), [])])
+  ],
+  dictionaries: [
+    String.raw`Dict<Stwing to Stwing> test = {"hi" to "hihi", "oof" to "oofoof"}
+    `,
+    new Program([
+      new VariableDeclaration(
+        new DictionaryType(StringType, StringType),
+        "test",
+        new DictionaryExpression([
+          new KeyValPair(
+            new StringLiteral('"hi"'),
+            new StringLiteral('"hihi"')
+          ),
+          new KeyValPair(
+            new StringLiteral('"oof"'),
+            new StringLiteral('"oofoof"')
+          )
+        ])
+      )
+    ])
   ]
 };
-
-console.log("hi");
-
-console.log(parse(fixture["funcdecAndCall"][0]));
 
 describe("The parser", () => {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {

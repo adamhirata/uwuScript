@@ -9,7 +9,7 @@ uwuScript {
                 | Exp "?" Exp "ewse" Exp                                            -- ternary
                 | (Type | "void") id "(" Params ")" Block                           -- funcdec
     SimpleStmt  = Type id "=" Exp                                                   -- vardec
-                | VarExp "=" Exps                                                   -- assignment
+                | VarExp "=" Exp                                                    -- assignment
                 | "bweak"                                                           -- break
                 | "retuwn" Exp?                                                     -- return
                 | Call

@@ -16,9 +16,12 @@ const {
   BooleanType,
   BreakStatement,
   Call,
-  //DictionaryExpression,
+  DictionaryExpression,
+  DictionaryType,
+  ForStatement,
   FunctionDeclaration,
   IfStatement,
+  KeyValPair,
   LargeBlock,
   NumericLiteral,
   NumType,
@@ -28,6 +31,7 @@ const {
   StringLiteral,
   StringType,
   SubscriptedExpression,
+  TernaryStatement,
   TinyBlock,
   UnaryExpression,
   VariableDeclaration,
@@ -38,6 +42,7 @@ const {
 const grammar = ohm.grammar(fs.readFileSync("./syntax/uwuScript.ohm"));
 
 function arrayToNullable(a) {
+  /* istanbul ignore next */
   return a.length === 0 ? null : a[0];
 }
 
@@ -61,21 +66,23 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
     _ei,
     _p3,
     moreTests,
-    moreBlocks,
     _p4,
+    moreBlocks,
     _e,
     lastBlock
   ) {
     const tests = [firstTest.ast(), ...moreTests.ast()];
-    const consquents = [firstBlock.ast(), ...moreBlocks.ast()];
+    const consequents = [firstBlock.ast(), ...moreBlocks.ast()];
+    console.log(consequents);
     const alternate = arrayToNullable(lastBlock.ast());
+    console.log(alternate);
     return new IfStatement(tests, consequents, alternate);
   },
-  Statement_for(_f, _id, _in, test1, _1, test2, block) {
-    return new ForStatement(test1.ast(), test2.ast(), block.ast());
+  Statement_for(_f, id, _in, test1, _1, test2, block) {
+    return new ForStatement(id.ast(), test1.ast(), test2.ast(), block.ast());
   },
-  Statement_ternary(test1, _q, test2, _e, test3) {
-    return new TernaryStatement(test1.ast(), test2.ast(), test3.ast());
+  Statement_ternary(test1, _q, yes, _e, no) {
+    return new TernaryStatement(test1.ast(), yes.ast(), no.ast());
   },
   Statement_funcdec(type, id, _p1, params, _p2, block) {
     return new FunctionDeclaration(
@@ -124,9 +131,9 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Exp5_array(_b, list, _b2) {
     return new ArrayExpression(list.ast());
   },
-  // Exp5_dictionary(_b, list, _b2) {
-  //   return new DictionaryExpression(list.ast());
-  // },
+  Exp5_dictionary(_b, list, _b2) {
+    return new DictionaryExpression(list.ast());
+  },
   Exp5_parens(_p, e, _p1) {
     return e.ast();
   },
@@ -162,6 +169,12 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   },
   ArrayType(_1, type, _2) {
     return new ArrayType(type.ast());
+  },
+  DictType(_1, t1, _2, t2, _3) {
+    return new DictionaryType(t1.ast(), t2.ast());
+  },
+  KeyValPair(e1, _t, e2) {
+    return new KeyValPair(e1.ast(), e2.ast());
   },
   id(_1, _2) {
     return this.sourceString;

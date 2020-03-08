@@ -30,6 +30,24 @@ class Call {
   }
 }
 
+class DictionaryExpression {
+  constructor(members) {
+    this.members = members;
+  }
+}
+
+class DictionaryType {
+  constructor(type1, type2) {
+    Object.assign(this, { type1, type2 });
+  }
+}
+
+class ForStatement {
+  constructor(tester, test1, test2, block) {
+    Object.assign(this, { tester, test1, test2, block });
+  }
+}
+
 class FunctionDeclaration {
   constructor(type, id, params, body) {
     this.id = id;
@@ -43,15 +61,16 @@ class FunctionObject {
   }
 }
 
-class IdentifierExpression {
-  constructor(id) {
-    this.id = id;
+class IfStatement {
+  constructor(cases, consequents, alternate) {
+    Object.assign(this, { cases, consequents, alternate });
   }
 }
 
-class IfStatement {
-  constructor(cases, alternate) {
-    Object.assign(this, { cases, alternate });
+class KeyValPair {
+  constructor(exp1, exp2) {
+    this.exp1 = exp1;
+    this.exp2 = exp2;
   }
 }
 
@@ -115,6 +134,12 @@ class SubscriptedExpression {
   }
 }
 
+class TernaryStatement {
+  constructor(test, success, fail) {
+    Object.assign(this, { test, success, fail });
+  }
+}
+
 class TinyBlock {
   constructor(simpleStmt) {
     this.simpleStmt = simpleStmt;
@@ -158,8 +183,12 @@ module.exports = {
   BooleanType,
   BreakStatement,
   Call,
+  DictionaryExpression,
+  DictionaryType,
+  ForStatement,
   FunctionDeclaration,
   IfStatement,
+  KeyValPair,
   LargeBlock,
   ArrayExpression,
   NumericLiteral,
@@ -170,6 +199,7 @@ module.exports = {
   StringLiteral,
   StringType,
   SubscriptedExpression,
+  TernaryStatement,
   TinyBlock,
   UnaryExpression,
   VariableDeclaration,
