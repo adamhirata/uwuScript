@@ -43,17 +43,8 @@ const {
 } = require("..");
 
 const fixture = {
-  // hello: [
-  //   String.raw`write 0, x;`,
-  //   new Program(
-  //     new Block([
-  //       new WriteStatement([
-  //         new IntegerLiteral("0"),
-  //         new VariableExpression("x")
-  //       ])
-  //     ])
-  //   )
-  // ],
+  //tests function declaration and calls
+
   funcdecAndCall: [
     String.raw`Numbwer avg (Numbwer num = 5 ) uwu retuwn 5 owo
       avg(7)
@@ -68,6 +59,9 @@ const fixture = {
       new Call(new Variable("avg"), [new Argument([], new NumericLiteral(7))])
     ])
   ],
+
+  //tests var declarations and string related stuff
+
   stringStuff: [
     String.raw`Stwing test = "test"
     test = "oof"
@@ -90,6 +84,9 @@ const fixture = {
       ])
     ])
   ],
+
+  //majority of the coverage here
+
   boolsAndOpsAndBlocks: [
     String.raw`Boowean test = fawse
     wile (!(test)) uwu
@@ -166,11 +163,17 @@ const fixture = {
       )
     ])
   ],
+
+  //edge-case for empty lists
+
   emptyList: [
     String.raw`print()
   `,
     new Program([new Call(new Variable("print"), [])])
   ],
+
+  //dictionary declaration and type literals
+
   dictionaries: [
     String.raw`Dict<Stwing to Stwing> test = {"hi" to "hihi", "oof" to "oofoof"}
     `,
