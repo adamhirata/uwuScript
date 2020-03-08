@@ -8,22 +8,27 @@ const fs = require("fs");
 
 const {
   Argument,
+  ArrayExpression,
+  ArrayType,
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
+  BooleanType,
   BreakStatement,
   Call,
+  //DictionaryExpression,
   FunctionDeclaration,
-  FunctionObject,
-  IdentifierExpression,
   IfStatement,
-  ListExpression,
+  LargeBlock,
   NumericLiteral,
+  NumType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
+  StringType,
   SubscriptedExpression,
+  TinyBlock,
   UnaryExpression,
   VariableDeclaration,
   Variable,
@@ -117,19 +122,49 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
     return new UnaryExpression(op.sourceString, e4.ast());
   },
   Exp5_array(_b, list, _b2) {
-    return new ListExpression(list.ast());
+    return new ArrayExpression(list.ast());
   },
-  Exp5_dictionary(_b, list, _b2) {
-    return new ListExpression(list.ast());
+  // Exp5_dictionary(_b, list, _b2) {
+  //   return new DictionaryExpression(list.ast());
+  // },
+  Exp5_parens(_p, e, _p1) {
+    return e.ast();
   },
   Call(varexp, _p, args, _p1) {
     return new Call(varexp.ast(), args.ast());
+  },
+  Param(type, id, _e, def) {
+    return new Parameter(type.ast(), id.ast(), arrayToNullable(def.ast()));
+  },
+  Arg(id, _c, exp) {
+    return new Argument(id.ast(), exp.ast());
   },
   VarExp_subscripted(v, _b1, e, _b2) {
     return new SubscriptedExpression(v.ast(), e.ast());
   },
   VarExp_simple(id) {
-    return new IdentifierExpression(id.ast());
+    return new Variable(id.ast());
+  },
+  NonemptyListOf(first, _, rest) {
+    return [first.ast(), ...rest.ast()];
+  },
+  EmptyListOf() {
+    return [];
+  },
+  NumType(_) {
+    return NumType;
+  },
+  StringType(_) {
+    return StringType;
+  },
+  BooleanType(_) {
+    return BooleanType;
+  },
+  ArrayType(_1, type, _2) {
+    return new ArrayType(type.ast());
+  },
+  id(_1, _2) {
+    return this.sourceString;
   },
   numlit(_d, _p, _d1, _d2) {
     return new NumericLiteral(+this.sourceString);

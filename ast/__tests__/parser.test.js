@@ -11,23 +11,26 @@ const parse = require("../parser");
 
 const {
   Argument,
+  ArrayExpression,
+  ArrayType,
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
-  Block,
+  BooleanType,
   BreakStatement,
   Call,
   FunctionDeclaration,
-  FunctionObject,
-  IdentifierExpression,
   IfStatement,
-  ListExpression,
+  LargeBlock,
   NumericLiteral,
+  NumType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
+  StringType,
   SubscriptedExpression,
+  TinyBlock,
   UnaryExpression,
   VariableDeclaration,
   Variable,
@@ -35,91 +38,44 @@ const {
 } = require("..");
 
 const fixture = {
-  hello: [
-    String.raw`write 0, x;`,
-    new Program(
-      new Block([
-        new WriteStatement([
-          new IntegerLiteral("0"),
-          new VariableExpression("x")
-        ])
-      ])
-    )
+  // hello: [
+  //   String.raw`write 0, x;`,
+  //   new Program(
+  //     new Block([
+  //       new WriteStatement([
+  //         new IntegerLiteral("0"),
+  //         new VariableExpression("x")
+  //       ])
+  //     ])
+  //   )
+  // ],
+  funcdecAndCall: [
+    String.raw`Numbwer avg (Numbwer num = 5 ) uwu retuwn 5 owo
+      avg(7)
+      `,
+    new Program([
+      new FunctionDeclaration(
+        NumType,
+        "avg",
+        [new Parameter(NumType, "num", new NumericLiteral(5))],
+        new TinyBlock([new ReturnStatement([new NumericLiteral(5)])])
+      ),
+      new Call(new Variable("avg"), [new Argument([], new NumericLiteral(7))])
+    ])
   ],
-
-  whiles: [
-    String.raw`while false loop x = 3; end;`,
-    new Program(
-      new Block([
-        new WhileStatement(
-          new BooleanLiteral(false),
-          new Block([
-            new AssignmentStatement(
-              new VariableExpression("x"),
-              new IntegerLiteral("3")
-            )
-          ])
-        )
-      ])
-    )
-  ],
-
-  declarations: [
-    String.raw`var x: int; var y: bool;`,
-    new Program(
-      new Block([
-        new VariableDeclaration("x", IntType),
-        new VariableDeclaration("y", BoolType)
-      ])
-    )
-  ],
-
-  math: [
-    String.raw`read x, y; write 2 * (-5 > 7+1);`,
-    new Program(
-      new Block([
-        new ReadStatement([
-          new VariableExpression("x"),
-          new VariableExpression("y")
-        ]),
-        new WriteStatement([
-          new BinaryExpression(
-            "*",
-            new IntegerLiteral("2"),
-            new BinaryExpression(
-              ">",
-              new UnaryExpression("-", new IntegerLiteral("5")),
-              new BinaryExpression(
-                "+",
-                new IntegerLiteral("7"),
-                new IntegerLiteral("1")
-              )
-            )
-          )
-        ])
-      ])
-    )
-  ],
-
-  logic: [
-    String.raw`write x and (not y or x);`,
-    new Program(
-      new Block([
-        new WriteStatement([
-          new BinaryExpression(
-            "and",
-            new VariableExpression("x"),
-            new BinaryExpression(
-              "or",
-              new UnaryExpression("not", new VariableExpression("y")),
-              new VariableExpression("x")
-            )
-          )
-        ])
-      ])
-    )
+  stringStuff: [
+    String.raw`Stwing test = "test"
+    test = "oof"
+    Awway<Stwing> arr = [test]
+    print(arr[1])
+    `,
+    new Program([])
   ]
 };
+
+console.log("hi");
+
+console.log(parse(fixture["funcdecAndCall"][0]));
 
 describe("The parser", () => {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {

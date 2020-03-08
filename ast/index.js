@@ -38,8 +38,8 @@ class FunctionDeclaration {
 }
 
 class FunctionObject {
-  constructor(id, params, body) {
-    Object.assign(this, { id, params, body });
+  constructor(type, id, params, body) {
+    Object.assign(this, { type, id, params, body });
   }
 }
 
@@ -61,9 +61,15 @@ class LargeBlock {
   }
 }
 
-class ListExpression {
+class ArrayExpression {
   constructor(members) {
     this.members = members;
+  }
+}
+
+class ArrayType {
+  constructor(type) {
+    this.type = type;
   }
 }
 
@@ -74,8 +80,14 @@ class NumericLiteral {
 }
 
 class Parameter {
-  constructor(id, defaultExpression) {
-    Object.assign(this, { id, defaultExpression });
+  constructor(type, id, defaultExpression) {
+    Object.assign(this, { type, id, defaultExpression });
+  }
+}
+
+class PrimitiveType {
+  constructor(type) {
+    this.type = type;
   }
 }
 
@@ -132,24 +144,31 @@ class WhileStatement {
   }
 }
 
+const NumType = new PrimitiveType("Numbwer");
+const StringType = new PrimitiveType("Stwing");
+const BooleanType = new PrimitiveType("Boowean");
+
 module.exports = {
   Argument,
+  ArrayExpression,
+  ArrayType,
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
+  BooleanType,
   BreakStatement,
   Call,
   FunctionDeclaration,
-  FunctionObject,
-  IdentifierExpression,
   IfStatement,
   LargeBlock,
-  ListExpression,
+  ArrayExpression,
   NumericLiteral,
+  NumType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
+  StringType,
   SubscriptedExpression,
   TinyBlock,
   UnaryExpression,

@@ -15,7 +15,7 @@ uwuScript {
                 | Call
                 | Exp
     Block       = "uwu" SimpleStmt? "owo" newline*			                            -- tiny
-                | "uwu" newline Statement* "owo" newline*   						            -- large
+                | "uwu" newline+ Statement* "owo" newline*   						            -- large
     Exp         = Exp "||" Exp1														                          -- or
                 | Exp "&&" Exp1														                          -- and
                 | Exp1															
