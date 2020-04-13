@@ -22,7 +22,7 @@ const {
   DictionaryExpression,
   DictionaryType,
   ForStatement,
-  FunctionDeclaration,
+  Func,
   IfStatement,
   KeyValPair,
   LargeBlock,
@@ -50,7 +50,7 @@ const fixture = {
       avg(7)
       `,
     new Program([
-      new FunctionDeclaration(
+      new Func(
         NumType,
         "avg",
         [new Parameter(NumType, "num", new NumericLiteral(5))],
