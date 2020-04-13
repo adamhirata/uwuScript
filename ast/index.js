@@ -48,7 +48,7 @@ class ForStatement {
   }
 }
 
-class FunctionDeclaration {
+class Func {
   constructor(type, id, params, body) {
     this.id = id;
     this.function = new FunctionObject(type, id, params, body);
