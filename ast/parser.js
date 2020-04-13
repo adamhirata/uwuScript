@@ -19,7 +19,7 @@ const {
   DictionaryExpression,
   DictionaryType,
   ForStatement,
-  FunctionDeclaration,
+  Func,
   IfStatement,
   KeyValPair,
   LargeBlock,
@@ -85,7 +85,7 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
     return new TernaryStatement(test1.ast(), yes.ast(), no.ast());
   },
   Statement_funcdec(type, id, _p1, params, _p2, block) {
-    return new FunctionDeclaration(
+    return new Func(
       type.ast(),
       id.ast(),
       params.ast(),
