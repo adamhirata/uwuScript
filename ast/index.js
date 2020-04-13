@@ -186,7 +186,7 @@ module.exports = {
   DictionaryExpression,
   DictionaryType,
   ForStatement,
-  FunctionDeclaration,
+  Func,
   IfStatement,
   KeyValPair,
   LargeBlock,
