@@ -3,7 +3,7 @@
 ![](icon.png)
 
 ## Introduction (づ｡◕‿‿◕｡)づ
-uwuScript is a cute scripting language that is designed to be fun (and possibly cringey) to use. Because of the use of adorable emoticons and keywords, you will not only feel cuter, but look cuter by the end of developing your program!❀ This language compiles to Javascript and pulls inspiration from other sugoi すごい languages such as Python's list comprehension, Java's static typing, and Swift's for-in loops. 
+uwuScript is a cute scripting language that is designed to be fun (and possibly cringey) to use. Because of the use of adorable emoticons and keywords, you will not only feel cuter, but look cuter by the end of developing your program!❀ This language compiles to Javascript and pulls inspiration from other sugoi すごい languages such as Python's list comprehension, Java's static typing, and Swift's for-in loops!
 
 
 ## Features
