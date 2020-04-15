@@ -28,7 +28,7 @@ const {
   UnaryExpression,
   VariableDeclaration,
   Variable,
-  WhileStatement
+  WhileStatement,
 } = require("../ast");
 const check = require("./check");
 const Context = require("./context");
@@ -71,22 +71,40 @@ ForStatement.prototype.analyze = function(context) {
   this.test1.analyze(context);
   this.test2.analyze(context);
   const blockContext = context.createChildContextForLoop();
-  this.body.forEach(n => n.analyze(bodyContext));
+  this.body.forEach((n) => n.analyze(bodyContext));
 };
 
 IfStatement.prototype.analyze = function(context) {
-  this.tests.forEach(test => {
-    test.analyze(context);
-    check.isBoolean(test);
+  this.cases.forEach((cases) => {
+    cases.analyze(context);
+    check.isBoolean(cases);
   });
-  this.consequents.map(block => {
+  this.consequents.forEach((block) => {
     const blockContext = context.createChildContextForBlock();
-    block.map(statement => {
-      statement.analyze(blockContext);
-    });
+    block.forEach((statement) => statement.analyze(blockContext));
   });
   if (this.alternate) {
     const alternateBlock = context.createChildContextForBlock();
-    this.alternate.map(s => s.analyze(alternateBlock));
+    this.alternate.forEach((s) => s.analyze(alternateBlock));
   }
+};
+
+NumericLiteral.prototype.analyze = function(context) {
+  this.type = NumType;
+};
+
+StringLiteral.prototype.analyze = function(context) {
+  this.type = StringType;
+};
+
+Parameter.prototype.analyze = function(context) {
+  context.add(this);
+};
+
+ReturnStatement.prototype.analyze = function(context) {
+  this.returnValue.analyze(context);
+};
+
+Program.prototype.analyze = function(context) {
+  this.statements.forEach((sm) => sm.analyze(context));
 };

@@ -5,4 +5,6 @@ const StandardFuctions = [
   new Func(NumType, "lenght", new Param("void", "s"))
 ];
 
-module.exports = {};
+module.exports = {
+  StandardFuctions
+};

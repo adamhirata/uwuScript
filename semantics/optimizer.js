@@ -28,7 +28,7 @@ const {
   UnaryExpression,
   VariableDeclaration,
   Variable,
-  WhileStatement
+  WhileStatement,
 } = require("../ast");
 
 function isZero(e) {
@@ -95,10 +95,10 @@ ForStatement.prototype.optimize = function() {
   this.test1 = this.test1.optimize;
   this.test2 = this.test2.optimize;
   this.block = this.block.optimize;
-  this.tester = this.tester.map(e => e.optimize());
+  this.tester = this.tester.map((e) => e.optimize());
   return this;
 };
 
-IfStatement.prototype.optimize = function() {
-  this.map(n => {});
+ReturnStatement.prototype.optimize = function() {
+  this.returnValue = this.returnValue.optimize();
 };
