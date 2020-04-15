@@ -3,8 +3,10 @@ const {
   StringType,
   BooleanType,
   ArrayType,
-  DictType
+  DictType,
 } = require("./builtins");
+
+const { Func } = require("./ast");
 
 function doCheck(condition, message) {
   if (!condition) {
@@ -47,6 +49,14 @@ module.exports = {
   },
 
   isFunction(value) {
-    doCheck(value instanceof Func, "Not a function");
-  }
+    doCheck(value instanceof Func, "Not a function ಥ_ಥ");
+  },
+
+  legalArugments(args, params) {
+    doCheck(
+      args.length === params.length,
+      `expected ${params.length} arguments, recieved ${args.length} ಥ_ಥ`
+    );
+    args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type));
+  },
 };

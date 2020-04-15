@@ -204,5 +204,5 @@ module.exports = {
   UnaryExpression,
   VariableDeclaration,
   Variable,
-  WhileStatement
+  WhileStatement,
 };
