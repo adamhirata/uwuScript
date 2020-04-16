@@ -63,7 +63,7 @@ function factorial(n) {
 
 ### Bubble Sort
 <pre><code>
-Aww<Numbwer> bubbuwSwort(Aww<Numbwer> aww) uwu 
+Aww&lt;Numbwer&gt; bubbuwSwort(Aww&lt;Numbwer&gt; aww) uwu 
   Numbwer len = length(aww)
   fow i in 0...len uwu 
     fow j in 0...len uwu
