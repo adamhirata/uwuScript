@@ -24,8 +24,8 @@ Numbwer a = 1
 Boowean b = a != 1
 Boow c = twue;
 Stwing d = "this wetter iz c"
-Awway`<Stwing>` e = ["this", "iz", "an", "awway"]
-Dictionawy`<Numbwer to Stwing>` f = {1 to "one", 2 to "two", 3 to "three"}
+Awway\<Stwing> e = ["this", "iz", "an", "awway"]
+Dictionawy\<Numbwer to Stwing> f = {1 to "one", 2 to "two", 3 to "three"}
 </code></pre>
 
 ### Unary and Binary Operators
