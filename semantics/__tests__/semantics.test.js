@@ -10,7 +10,7 @@ const analyze = require("../analyzer");
 
 // This is just enough to complete 100% analyzer coverage, but feels light to me.
 const program = String.raw`
-
+  Stwing test = "test"
 `;
 
 describe("The semantic analyzer", () => {

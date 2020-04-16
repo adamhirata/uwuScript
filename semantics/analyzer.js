@@ -210,7 +210,6 @@ UnaryExpression.prototype.analyze = function (context) {
 
 VariableDeclaration.prototype.analyze = function (context) {
   this.initializer.analyze(context);
-  this.type = context.lookupValue(this.type);
   check.isAssignableTo(this.initializer, this.type);
   context.add(this);
 };
@@ -226,19 +225,19 @@ WhileStatement.prototype.analyze = function (context) {
   this.body.forEach((n) => n.analyze(bodyContext));
 };
 
-IfStatement.prototype.analyze = function(context) {
-  this.tests.forEach(test => {
+IfStatement.prototype.analyze = function (context) {
+  this.tests.forEach((test) => {
     test.analyze(context);
     check.isBoolean(test);
   });
-  this.consequents.map(block => {
+  this.consequents.map((block) => {
     const blockContext = context.createChildContextForBlock();
-    block.map(statement => {
+    block.map((statement) => {
       statement.analyze(blockContext);
     });
   });
   if (this.alternate) {
     const alternateBlock = context.createChildContextForBlock();
-    this.alternate.map(s => s.analyze(alternateBlock));
+    this.alternate.map((s) => s.analyze(alternateBlock));
   }
 };
