@@ -18,16 +18,6 @@ uwuScript is a cute scripting language that is designed to be fun (and possibly 
 * Awway/Aww
 * Dictionawy/Dict
 
-### Declarations
-<pre><code>
-Numbwer a = 1
-Boowean b = a != 1
-Boow c = twue;
-Stwing d = "this wetter iz c"
-Awway&lt;Stwing&gt; e = ["this", "iz", "an", "awway"]
-Dictionawy&lt;Numbwer to Stwing&gt; f = {1 to "one", 2 to "two", 3 to "three"}
-</code></pre>
-
 ### Unary and Binary Operators
 * add <code> + </code>
 * subtract <code> - </code>
@@ -41,6 +31,16 @@ Dictionawy&lt;Numbwer to Stwing&gt; f = {1 to "one", 2 to "two", 3 to "three"}
 * less than or equal to <code> <= </code>
 * greater than <code> > </code>
 * greater than or equal to <code> >= </code>
+
+### Declarations
+<pre><code>
+Numbwer a = 1
+Boowean b = a != 1
+Boow c = twue;
+Stwing d = "this wetter iz c"
+Awway&lt;Stwing&gt; e = ["this", "iz", "an", "awway"]
+Dictionawy&lt;Numbwer to Stwing&gt; f = {1 to "one", 2 to "two", 3 to "three"}
+</code></pre>
 
 ### Comments
 <pre><code> 
@@ -148,4 +148,3 @@ for(int i = 0; i <= 10; i++) {
   }
 }
 </code></pre>
-
