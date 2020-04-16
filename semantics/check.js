@@ -8,6 +8,8 @@ const {
   Func,
 } = require("../ast");
 
+const { Func } = require("./ast");
+
 function doCheck(condition, message) {
   if (!condition) {
     throw new Error(message);
