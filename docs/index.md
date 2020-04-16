@@ -3,19 +3,51 @@
 <p align="center"><img src="./images/logo_transparent_background.png" alt="uwuScript logo" width="450"/></p>
 
 ## Introduction (づ｡◕‿‿◕｡)づ
-uwuScript is a cute scripting language that is designed to be fun (and possibly cringey) to use. Because of the use of adorable emoticons and keywords, you will not only feel cuter, but look cuter by the end of developing your program!❀ This language compiles to Javascript and pulls inspiration from other sugoi すごい languages such as Python's list comprehension, Java's static typing, and Swift's for-in loops. 
+uwuScript is a cute scripting language that is designed to be fun (and possibly cringey) to use. Because of the use of adorable emoticons and keywords, you will not only feel cuter, but look cuter by the end of developing your program!❀ This language compiles to Javascript and pulls inspiration from other sugoi すごい languages such as Java's static typing and Swift's for-in loops. 
 
 
 ## Features
 * Cuteness
 * Scripting Language
 * Statically Typed
-* List Comprehansion (in-progress)
 * For-in/While Loops
+
+### Types
+* Boowean/Boow
+* Stwing
+* Numbwer
+* Awway/Aww
+* Dictionawy/Dict
+
+### Declarations
+<pre><code>
+Numbwer a = 1
+Boowean b = a != 1
+Boow c = twue;
+Stwing d = "this wetter iz c"
+Awway<Stwing> e = ["this", "iz", "an", "awway"]
+Dictionawy<Numbwer to Stwing) f = {1 to "one", 2 to "two", 3 to "three"}
+</code></pre>
+
+
+### Unary and Binary Operators
+* add <code> + </code>
+* subtract <code> - </code>
+* multiply <code> * </code>
+* divide <code> / </code>
+* modulo <code> % </code>
+* not <code> ! </code>
+* negative <code> - </code>
+* equality <code> == </code> <code> != </code>
+* less than <code> < </code>
+* less than or equal to <code> <= </code>
+* greater than <code> > </code>
+* greater than or equal to <code> >= </code>
 
 ## Code Examples
 * Top is uwuScript
 * Bottom is JavaScript
+
 ### Max Number
 <pre><code>
 Numbwer max(Numbwer n, Numbwer m) uwu
@@ -36,6 +68,7 @@ function max(n, m) {
   }
 }
 </code></pre>
+
 ### Factorial
 <pre><code>
 Numbwer factorial (Numbwer n) uwu
