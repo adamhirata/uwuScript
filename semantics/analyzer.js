@@ -241,3 +241,23 @@ IfStatement.prototype.analyze = function (context) {
     this.alternate.map((s) => s.analyze(alternateBlock));
   }
 };
+
+NumericLiteral.prototype.analyze = function (context) {
+  this.type = NumType;
+};
+
+StringLiteral.prototype.analyze = function (context) {
+  this.type = StringType;
+};
+
+Parameter.prototype.analyze = function (context) {
+  context.add(this);
+};
+
+ReturnStatement.prototype.analyze = function (context) {
+  this.returnValue.analyze(context);
+};
+
+Program.prototype.analyze = function (context) {
+  this.statements.forEach((sm) => sm.analyze(context));
+};
