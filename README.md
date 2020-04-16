@@ -101,7 +101,7 @@ function factorial(n) {
 
 ### Bubble Sort
 <pre><code>
-Aww<Numbwer> bubbleSort(Aww<Numbwer> arr) uwu 
+Aww&lt;Numbwer&gt; bubbleSort(Aww&lt;Numbwer&gt; arr) uwu 
   Numbwer len = length(arr)
   fow i in 0...len uwu 
     fow j in 0...len uwu
