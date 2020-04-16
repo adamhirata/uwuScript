@@ -60,8 +60,8 @@ function factorial(n) {
 ### Nested for-in loop
 <pre><code>
 fow i in 0...10 uwu
-	fow j in 0...10 uwu
-    	pwint(i + j)
+  fow j in 0...10 uwu
+    pwint(i + j)
   owo
   if (i % 2 == 0) uwu
     aww[i-1] = stwing(i)
