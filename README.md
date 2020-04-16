@@ -152,7 +152,9 @@ for(int i = 0; i <= 10; i++) {
 
 ### Semantic Errors
 * Cannot chain relation operators 
+
   <code> a < b < c </code>
+  
 * Using relation operators on non-numbers
   <code> "a" < "b" </code>
 * Using mathematical operators on non-numbers
