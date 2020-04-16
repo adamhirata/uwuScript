@@ -6,7 +6,7 @@ class Context {
       parent,
       currentFunction,
       inLoop,
-      declarations: new Map()
+      declarations: new Map(),
     });
   }
 
@@ -20,7 +20,7 @@ class Context {
     return new Context({
       parent: this,
       currentFunction: this.currentFunction,
-      inLoop: true
+      inLoop: true,
     });
   }
 
@@ -29,7 +29,7 @@ class Context {
     return new Context({
       parent: this,
       currentFunction: this.currentFunction,
-      inLoop: this.inLoop
+      inLoop: this.inLoop,
     });
   }
 
@@ -59,7 +59,7 @@ class Context {
 }
 
 Context.INITIAL = new Context();
-StandardFunctions.forEach(f => {
+StandardFunctions.forEach((f) => {
   Context.INITIAL.declarations[f.id] = f;
 });
 

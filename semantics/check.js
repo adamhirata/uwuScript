@@ -1,5 +1,6 @@
 const util = require("util");
 const {
+  NullType,
   NumType,
   StringType,
   BooleanType,
@@ -8,16 +9,41 @@ const {
   Func,
 } = require("../ast");
 
-const { Func } = require("./ast");
-
 function doCheck(condition, message) {
   if (!condition) {
     throw new Error(message);
   }
 }
 
+function isAssignableTo(exp, type) {
+  if (
+    exp.type.constructor === DictionaryType &&
+    type.constructor === DictionaryType
+  ) {
+    exp.members.forEach((m) => {
+      isAssignableTo(m.exp1, type.type1);
+      isAssignableTo(m.exp2, type.type2);
+    });
+  } else if (
+    exp.type.constructor === ArrayType &&
+    type.constructor === ArrayType
+  ) {
+    exp.members.forEach((m) => {
+      isAssignableTo(m, type.type);
+    });
+  } else if (exp.type === NullType) {
+  } else {
+    doCheck(
+      exp.type === type,
+      `expression of type ${util.format(exp.type)}
+     is not compatible with ${util.format(type)} ಥ_ಥ`
+    );
+  }
+}
+
 module.exports = {
   isNumber(exp) {
+    console.log(NumType);
     doCheck(exp.type === NumType, "Not a Numbwer ಥ_ಥ");
   },
 
@@ -38,17 +64,13 @@ module.exports = {
   },
 
   sameType(exp1, exp2) {
-    exp1.type === exp2.type,
-      "expressions must have same type ＼（＾○＾）人（＾○＾）／";
-  },
-
-  isAssignableTo(exp, type) {
     doCheck(
-      exp.type === type,
-      `expression of type ${util.format(exp.type)}
-       is not compatible with ${util.format(type)} ಥ_ಥ`
+      exp1.type === exp2.type,
+      "expressions must have same type ＼（＾○＾）人（＾○＾）／"
     );
   },
+
+  isAssignableTo,
 
   isFunction(value) {
     doCheck(value instanceof Func, "Not a function ಥ_ಥ");

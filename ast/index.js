@@ -1,3 +1,5 @@
+const check = require("../semantics/check");
+
 class Argument {
   constructor(id, expression) {
     Object.assign(this, { id, expression });
@@ -63,20 +65,40 @@ class FunctionObject {
   analyze(context) {
     this.params - this.params.map((p) => new Parameter(p.type, p.id));
     this.params.forEach((p) => p.analyze(context));
-    this.body.forEach((sm) => sm.analyze(context));
-
-    //Go through the function to look for return statements
-    const rs = this.body.filter((b) => b.constructor === ReturnStatement);
-    if (rs.length === 0 && this.type !== "void") {
-      throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
-    } else if (returnStatement.length > 0) {
-      if (this.type === "void") {
+    if (this.body.type === LargeBlock) {
+      this.body.forEach((sm) => sm.analyze(context));
+      const rs = this.body.filter((b) => b.constructor === ReturnStatement);
+      if (rs.length === 0 && this.type !== "void") {
+        throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
+      } else if (returnStatement.length > 0) {
+        if (this.type === "void") {
+          throw new Error(
+            "Void functions cannot have retuwn statements (」°ロ°)」"
+          );
+        }
+        rs.forEach((sm) =>
+          check.isAssignableTo(sm.returnValue.type, this.type)
+        );
+      }
+    } else {
+      this.body.analyze(context);
+      if (
+        this.body.simpleStmt.constructor === ReturnStatement &&
+        this.type === "void"
+      ) {
         throw new Error(
           "Void functions cannot have retuwn statements (」°ロ°)」"
         );
+      } else if (
+        this.body.simpleStmt.constructor !== ReturnStatement &&
+        this.type !== "void"
+      ) {
+        throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
       }
-      this.isAssignableTo(returnStatement[0].returnValue.type, this.type);
+      check.isAssignableTo(this.body.simpleStmt.returnValue, this.type);
     }
+
+    //Go through the function to look for return statements
   }
 }
 
@@ -110,6 +132,8 @@ class ArrayType {
     this.type = type;
   }
 }
+
+class Null {}
 
 class NumericLiteral {
   constructor(value) {
@@ -173,6 +197,8 @@ class UnaryExpression {
 class VariableDeclaration {
   constructor(type, id, initializer) {
     Object.assign(this, { type, id, initializer });
+    console.log(id + ": ");
+    console.log(initializer);
   }
 }
 
@@ -188,6 +214,7 @@ class WhileStatement {
   }
 }
 
+const NullType = new PrimitiveType("null");
 const NumType = new PrimitiveType("Numbwer");
 const StringType = new PrimitiveType("Stwing");
 const BooleanType = new PrimitiveType("Boowean");
@@ -211,6 +238,8 @@ module.exports = {
   LargeBlock,
   ArrayExpression,
   NumericLiteral,
+  Null,
+  NullType,
   NumType,
   Parameter,
   Program,

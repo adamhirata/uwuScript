@@ -15,6 +15,8 @@ const {
   IfStatement,
   KeyValPair,
   LargeBlock,
+  Null,
+  NullType,
   NumericLiteral,
   NumType,
   Parameter,
@@ -63,6 +65,8 @@ BinaryExpression.prototype.analyze = function (context) {
   this.left.analyze(context);
   this.right.analyze(context);
 
+  console.log(NumType);
+
   if (/[-+*/%]/.test(this.op)) {
     check.isNumber(this.left);
     check.isNumber(this.right);
@@ -104,13 +108,13 @@ DictionaryExpression.prototype.analyze = function (context) {
   });
   if (this.members.length > 0) {
     this.type = new DictionaryType(
-      this.members[0].exp1.value,
-      this.members[0].exp2.value
+      this.members[0].exp1.type,
+      this.members[0].exp2.type
     );
-    for (let i = 1; i < this.members.length; i++) {
-      check.sameType(this.members[i].exp1.type, this.type.type1);
-      check.sameType(this.members[i].exp2.type, this.type.type2);
-    }
+    this.members.forEach((m) => {
+      check.isAssignableTo(m.exp1, this.type.type1);
+      check.isAssignableTo(m.exp2, this.type.type2);
+    });
   }
 };
 
@@ -152,6 +156,10 @@ LargeBlock.prototype.analyze = function (context) {
   this.statements.forEach((sm) => sm.analyze(context));
 };
 
+Null.prototype.analyze = function (context) {
+  this.type = NullType;
+};
+
 NumericLiteral.prototype.analyze = function (context) {
   this.type = NumType;
 };
@@ -165,7 +173,11 @@ Program.prototype.analyze = function (context) {
 };
 
 ReturnStatement.prototype.analyze = function (context) {
-  this.returnValue.analyze(context);
+  if (this.returnValue) {
+    this.returnValue.forEach((v) => {
+      v.analyze(context);
+    });
+  }
 };
 
 StringLiteral.prototype.analyze = function (context) {
@@ -254,9 +266,9 @@ Parameter.prototype.analyze = function (context) {
   context.add(this);
 };
 
-ReturnStatement.prototype.analyze = function (context) {
-  this.returnValue.analyze(context);
-};
+// ReturnStatement.prototype.analyze = function (context) {
+//   this.returnValue.analyze(context);
+// };
 
 Program.prototype.analyze = function (context) {
   this.statements.forEach((sm) => sm.analyze(context));

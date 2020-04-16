@@ -24,6 +24,7 @@ const {
   KeyValPair,
   LargeBlock,
   NumericLiteral,
+  Null,
   NumType,
   Parameter,
   Program,
@@ -73,9 +74,7 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   ) {
     const tests = [firstTest.ast(), ...moreTests.ast()];
     const consequents = [firstBlock.ast(), ...moreBlocks.ast()];
-    console.log(consequents);
     const alternate = arrayToNullable(lastBlock.ast());
-    console.log(alternate);
     return new IfStatement(tests, consequents, alternate);
   },
   Statement_for(_f, id, _in, test1, _1, test2, block) {
@@ -180,11 +179,17 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   numlit(_d, _p, _d1, _d2) {
     return new NumericLiteral(+this.sourceString);
   },
+  nulllit(_null) {
+    return new Null();
+  },
   boollit(_val) {
     return new BooleanLiteral(this.sourceString);
   },
   strlit(_q, _chars, _q1) {
     return new StringLiteral(this.sourceString);
+  },
+  _terminal() {
+    return this.sourceString;
   },
 });
 /* eslint-enable no-unused-vars */
