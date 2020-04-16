@@ -7,6 +7,8 @@ uwuScript is a cute scripting language that is designed to be fun (and possibly 
 
 This language was born out of the need to make programming in groups more enjoyable. It makes reading code out loud in groups funny and goofy. If you don't believe us, try reading some of the example programs out loud (including all of the uwus and owos)! Of course, the user is expected to use what we are going to call "uwu case" where all identifier names are typed in a cute fashion wherever possible. 
 
+Visit our GitHub page here: https://github.com/adamhirata/uwuScript
+
 ## Features
 * Cuteness
 * Scripting Language
