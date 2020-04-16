@@ -98,6 +98,34 @@ function factorial(n) {
 }
 </code></pre>
 
+### Bubble Sort
+<pre><code>
+Aww<Numbwer> bubbleSort(Aww<Numbwer> arr) uwu 
+  Numbwer len = length(arr)
+  fow i in 0...len uwu 
+    fow j in 0...len uwu
+      if (arr[j] > arr[j+1]) uwu
+        [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
+      owo
+    owo
+  owo
+  retuwn arr
+owo
+</pre></code>
+
+<pre><code>
+function bubbleSort(arr) {
+  let len = arr.length;
+  for (let i = 0; i < len; i++) {
+      for (let j = 0; j < len; j++) {
+        if (arr[j] > arr[j + 1]) {
+ 	  [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
+        }
+      }
+  }
+  return arr;
+};
+</pre></code>
 ### Nested for-in loop
 <pre><code>
 fow i in 0...10 uwu
