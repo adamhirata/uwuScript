@@ -11,47 +11,6 @@ uwuScript is a cute scripting language that is designed to be fun (and possibly 
 * Statically Typed
 * For-in/While Loops
 
-### Types
-* Boowean/Boow
-* Stwing
-* Numbwer
-* Awway/Aww
-* Dictionawy/Dict
-
-### Unary and Binary Operators
-* add <code> + </code>
-* subtract <code> - </code>
-* multiply <code> * </code>
-* divide <code> / </code>
-* modulo <code> % </code>
-* not <code> ! </code>
-* negative <code> - </code>
-* equality <code> == </code> or <code> != </code>
-* less than <code> < </code>
-* less than or equal to <code> <= </code>
-* greater than <code> > </code>
-* greater than or equal to <code> >= </code>
-
-### Declarations
-<pre><code>
-Numbwer a = 1
-Boowean b = a != 1
-Boow c = twue;
-Stwing d = "this wetter iz c"
-Awway&lt;Stwing&gt; e = ["this", "iz", "an", "awway"]
-Dictionawy&lt;Numbwer to Stwing&gt; f = {1 to "one", 2 to "two", 3 to "three"}
-</code></pre>
-
-### Comments
-<pre><code> 
-Stwing a = "cute"         (*≧ω≦*) uwu
-Stwing b = "give" 	  (づ ◕‿◕ )づ here take this
-Stwing c = "happy"        (ﾉﾟ▽ﾟ)ﾉ yay it finally works
-
-(╯°益°)╯彡┻━┻ I hate this table
-Where did that table go?      ┻━┻
-Nevermind that table was pretty cool ┬─┬ノ( º _ ºノ)
-</code></pre>
 ## Code Examples
 * Top is uwuScript
 * Bottom is JavaScript
