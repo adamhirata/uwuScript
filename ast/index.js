@@ -59,6 +59,25 @@ class FunctionObject {
   constructor(type, id, params, body) {
     Object.assign(this, { type, id, params, body });
   }
+
+  analyze(context) {
+    this.params - this.params.map((p) => new Parameter(p.type, p.id));
+    this.params.forEach((p) => p.analyze(context));
+    this.body.forEach((sm) => sm.analyze(context));
+
+    //Go through the function to look for return statements
+    const rs = this.body.filter((b) => b.constructor === ReturnStatement);
+    if (rs.length === 0 && this.type !== "void") {
+      throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
+    } else if (returnStatement.length > 0) {
+      if (this.type === "void") {
+        throw new Error(
+          "Void functions cannot have retuwn statements (」°ロ°)」"
+        );
+      }
+      this.isAssignableTo(returnStatement[0].returnValue.type, this.type);
+    }
+  }
 }
 
 class IfStatement {
@@ -152,8 +171,8 @@ class UnaryExpression {
   }
 }
 class VariableDeclaration {
-  constructor(type, ids, initializers) {
-    Object.assign(this, { type, ids, initializers });
+  constructor(type, id, initializer) {
+    Object.assign(this, { type, id, initializer });
   }
 }
 
@@ -204,5 +223,5 @@ module.exports = {
   UnaryExpression,
   VariableDeclaration,
   Variable,
-  WhileStatement
+  WhileStatement,
 };

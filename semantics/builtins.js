@@ -1,8 +1,12 @@
 const { Func, Parameter, NumType, StringType } = require("../ast");
 
-const StandardFuctions = [
-  new Func("void", "pwint", [new Param("void", "s")]),
-  new Func(NumType, "lenght", new Param("void", "s"))
+const StandardFunctions = [
+  new Func("void", "pwint", [new Parameter("void", "s")]),
+  new Func(NumType, "length", new Parameter("void", "s")),
 ];
 
-module.exports = {};
+StandardFunctions.forEach((f) => {
+  f.builtin = true;
+});
+
+module.exports = { StandardFunctions };

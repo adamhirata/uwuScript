@@ -3,8 +3,9 @@ const {
   StringType,
   BooleanType,
   ArrayType,
-  DictType
-} = require("./builtins");
+  DictionaryType,
+  Func,
+} = require("../ast");
 
 function doCheck(condition, message) {
   if (!condition) {
@@ -30,7 +31,7 @@ module.exports = {
   },
 
   isDictionary(exp) {
-    doCheck(exp.type === DictType, "Not a Dictionawy ಥ_ಥ");
+    doCheck(exp.type === DictionaryType, "Not a Dictionawy ಥ_ಥ");
   },
 
   sameType(exp1, exp2) {
@@ -47,6 +48,18 @@ module.exports = {
   },
 
   isFunction(value) {
-    doCheck(value instanceof Func, "Not a function");
-  }
+    doCheck(value instanceof Func, "Not a function ಥ_ಥ");
+  },
+
+  isCollectionType(e) {
+    return e.constructor === ArrayType || e.constructor === DictionaryType;
+  },
+
+  legalArugments(args, params) {
+    doCheck(
+      args.length === params.length,
+      `expected ${params.length} arguments, recieved ${args.length} ಥ_ಥ`
+    );
+    args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type));
+  },
 };

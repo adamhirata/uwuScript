@@ -28,16 +28,38 @@ const {
   UnaryExpression,
   VariableDeclaration,
   Variable,
-  WhileStatement
+  WhileStatement,
 } = require("../ast");
 const check = require("./check");
 const Context = require("./context");
 
-module.exports = function(exp) {
+module.exports = function (exp) {
   exp.analyze(Context.INITIAL);
 };
 
-BinaryExpression.prototype.analyze = function(context) {
+Argument.prototype.analyze = function (context) {
+  this.expression.analyze(context);
+};
+
+ArrayExpression.prototype.analyze = function (context) {
+  this.members.forEach((m) => {
+    m.analyze(context);
+  });
+  if (this.members.length > 0) {
+    this.type = new ArrayType(this.members[0].type);
+    this.members.forEach((m) => {
+      check.sameType(this.type.type, m.type);
+    });
+  }
+};
+
+AssignmentStatement.prototype.analyze = function (context) {
+  this.sources.analyze(context);
+  this.targets.analyze(context);
+  check.isAssignableTo(this.source, this.target.type);
+};
+
+BinaryExpression.prototype.analyze = function (context) {
   this.left.analyze(context);
   this.right.analyze(context);
 
@@ -59,17 +81,147 @@ BinaryExpression.prototype.analyze = function(context) {
   }
 };
 
-BooleanLiteral.prototype.analyze = function(context) {
+BooleanLiteral.prototype.analyze = function (context) {
   this.type = BooleanType;
 };
 
-BreakStatement.prototype.analyze = function(context) {
+BreakStatement.prototype.analyze = function (context) {
   if (!context.inLoop) throw Error("Break statement used out of loop ლ(ﾟдﾟლ)");
 };
 
-ForStatement.prototype.analyze = function(context) {
+Call.prototype.analyze = function (context) {
+  this.analyze(callee);
+  this.args.forEach((a) => a.analyze(context));
+  this.type = this.callee.type;
+  check.isFunction(this.callee.value);
+  check.legalArugments(this.args, this.callee.value.params);
+};
+
+DictionaryExpression.prototype.analyze = function (context) {
+  this.members.forEach((m) => {
+    m.exp1.analyze(context);
+    m.exp2.analyze(context);
+  });
+  if (this.members.length > 0) {
+    this.type = new DictionaryType(
+      this.members[0].exp1.value,
+      this.members[0].exp2.value
+    );
+    for (let i = 1; i < this.members.length; i++) {
+      check.sameType(this.members[i].exp1.type, this.type.type1);
+      check.sameType(this.members[i].exp2.type, this.type.type2);
+    }
+  }
+};
+
+ForStatement.prototype.analyze = function (context) {
   this.test1.analyze(context);
   this.test2.analyze(context);
-  const blockContext = context.createChildContextForLoop();
-  this.body.forEach(n => n.analyze(bodyContext));
+  const bodyContext = context.createChildContextForLoop();
+  this.body.forEach((n) => n.analyze(bodyContext));
+};
+
+Func.prototype.analyze = function (context) {
+  context.add(this.function);
+  this.function.analyze(context.createChildContextForFunctionBody(this));
+};
+
+IfStatement.prototype.analyze = function (context) {
+  this.tests.forEach((test) => {
+    test.analyze(context);
+    check.isBoolean(test);
+  });
+  this.consequents.map((block) => {
+    const blockContext = context.createChildContextForBlock();
+    block.map((statement) => {
+      statement.analyze(blockContext);
+    });
+  });
+  if (this.alternate) {
+    const alternateBlock = context.createChildContextForBlock();
+    this.alternate.map((s) => s.analyze(alternateBlock));
+  }
+};
+
+KeyValPair.prototype.analyze = function (context) {
+  this.exp1.analyze(context);
+  this.exp2.analyze(context);
+};
+
+LargeBlock.prototype.analyze = function (context) {
+  this.statements.forEach((sm) => sm.analyze(context));
+};
+
+NumericLiteral.prototype.analyze = function (context) {
+  this.type = NumType;
+};
+
+Parameter.prototype.analyze = function (context) {
+  context.add(this);
+};
+
+Program.prototype.analyze = function (context) {
+  this.statements.forEach((sm) => sm.analyze(context));
+};
+
+ReturnStatement.prototype.analyze = function (context) {
+  this.returnValue.analyze(context);
+};
+
+StringLiteral.prototype.analyze = function (context) {
+  this.type = StringType;
+};
+
+SubscriptedExpression.prototype.analyze = function (context) {
+  this.variable.analyze(context);
+  this.subscript.analyze(context);
+  if (variable.type === ArrayType) {
+    check.isNumber(this.subscript);
+    this.type = this.variable.type.type;
+  } else if (variable.type === DictionaryType) {
+    check.sameType(this.id.type.type1, this.subscript.type);
+    this.type = this.id.type.type2;
+  }
+};
+
+TernaryStatement.prototype.analyze = function (context) {
+  this.test.analyze(context);
+  check.isBoolean(this.test);
+  this.success.analyze(context);
+  this.fail.analyze(context);
+  check.sameType(this.success.type, this.fail.type);
+  this.type = this.success.type;
+};
+
+TinyBlock.prototype.analyze = function (context) {
+  this.simpleStmt.analyze(context);
+};
+
+UnaryExpression.prototype.analyze = function (context) {
+  this.operand.analyze(context);
+  if (this.op == "-") {
+    check.isNumber(this.operand);
+    this.type = NumType;
+  } else if (this.op == "!") {
+    check.isBoolean(this.operand);
+    this.type = BooleanType;
+  }
+};
+
+VariableDeclaration.prototype.analyze = function (context) {
+  this.initializer.analyze(context);
+  this.type = context.lookupValue(this.type);
+  check.isAssignableTo(this.initializer, this.type);
+  context.add(this);
+};
+
+Variable.prototype.analyze = function (context) {
+  this.value = context.lookupValue(this.id);
+  this.type = this.value.type;
+};
+
+WhileStatement.prototype.analyze = function (context) {
+  this.test.analyze(context);
+  const bodyContext = context.createChildContextForLoop();
+  this.body.forEach((n) => n.analyze(bodyContext));
 };

@@ -36,7 +36,7 @@ const {
   UnaryExpression,
   VariableDeclaration,
   Variable,
-  WhileStatement
+  WhileStatement,
 } = require(".");
 
 const grammar = ohm.grammar(fs.readFileSync("./syntax/uwuScript.ohm"));
@@ -85,12 +85,10 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
     return new TernaryStatement(test1.ast(), yes.ast(), no.ast());
   },
   Statement_funcdec(type, id, _p1, params, _p2, block) {
-    return new Func(
-      type.ast(),
-      id.ast(),
-      params.ast(),
-      block.ast()
-    );
+    if (type.sourceString === "void") {
+      return new Func(type.sourceString, id.ast(), params.ast(), block.ast());
+    }
+    return new Func(type.ast(), id.ast(), params.ast(), block.ast());
   },
   SimpleStmt_vardec(type, id, _e, exp) {
     return new VariableDeclaration(type.ast(), id.ast(), exp.ast());
@@ -187,11 +185,11 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   },
   strlit(_q, _chars, _q1) {
     return new StringLiteral(this.sourceString);
-  }
+  },
 });
 /* eslint-enable no-unused-vars */
 
-module.exports = text => {
+module.exports = (text) => {
   const match = grammar.match(text);
   if (!match.succeeded()) {
     throw match.message;
