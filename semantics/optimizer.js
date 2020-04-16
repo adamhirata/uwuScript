@@ -98,3 +98,7 @@ ForStatement.prototype.optimize = function() {
   this.tester = this.tester.map(e => e.optimize());
   return this;
 };
+
+IfStatement.prototype.optimize = function() {
+  this.map(n => {});
+};

@@ -225,3 +225,20 @@ WhileStatement.prototype.analyze = function (context) {
   const bodyContext = context.createChildContextForLoop();
   this.body.forEach((n) => n.analyze(bodyContext));
 };
+
+IfStatement.prototype.analyze = function(context) {
+  this.tests.forEach(test => {
+    test.analyze(context);
+    check.isBoolean(test);
+  });
+  this.consequents.map(block => {
+    const blockContext = context.createChildContextForBlock();
+    block.map(statement => {
+      statement.analyze(blockContext);
+    });
+  });
+  if (this.alternate) {
+    const alternateBlock = context.createChildContextForBlock();
+    this.alternate.map(s => s.analyze(alternateBlock));
+  }
+};
