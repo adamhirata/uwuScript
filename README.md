@@ -149,3 +149,69 @@ for(int i = 0; i <= 10; i++) {
   }
 }
 </code></pre>
+
+### Semantic Errors
+* Cannot chain relation operators 
+
+  <code> a < b < c </code>
+* Using relation operators on non-numbers
+
+  <code> "a" < "b" </code>
+* Using mathematical operators on non-numbers
+	
+  <code> "a" + "b" </code>
+* Using "and" or "or" operators on non booleans
+
+  <code> 1 && 2 </code>
+* Using equality operators on expressions of different types
+
+  <code>"1" == 1</code>  
+* Assigning a variable to a differently typed expression
+
+  <code>
+  Numbwer a = 1
+  a = "one"
+  </code>
+* Declaring a variable with 2 different types
+
+  <code>
+  Numbwer a = "one"
+  </code>
+* Cannot return a different type than specified 
+
+  <code> 
+  Aww&lt;Numbwer&gt; a() uwu
+    retuwn 1
+  owo
+  </code>
+* Arrays/Dictionaries must be of specified type
+
+  <code>
+  Aww&lt;Numbwer&gt; a = ["1"]
+  Dict&lt;Numbwer to Stwing&gt; b = {1 to "two", "1" to "two"}
+  </code>
+* Using break outside of a loop
+
+  <code>
+  Numbwer a = 2
+  bweak
+  </code>
+* Incorrect amount or type of function parameters
+
+  <code>
+  Numbwer a (Stwing str) uwu retuwn 2 owo
+  a(2)
+  a(2, "two")
+  </code>
+* Expression in if statement, while loop, or ternary statement is not a boolean
+
+  <code>
+  Stwing a = "twue"
+  while (a) uwu
+    pwint(a)
+  owo
+  if (a) uwu
+    pwint(a)
+  owo
+  a ? a = "twue" ewse a = "fawse"
+  </code>
