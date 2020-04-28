@@ -63,7 +63,9 @@ class FunctionObject {
   }
 
   analyze(context) {
-    this.params - this.params.map((p) => new Parameter(p.type, p.id));
+    this.params = this.params.map((p) => {
+      new Parameter(p.type, p.id);
+    });
     this.params.forEach((p) => p.analyze(context));
     if (this.body.type === LargeBlock) {
       this.body.forEach((sm) => sm.analyze(context));
@@ -197,8 +199,6 @@ class UnaryExpression {
 class VariableDeclaration {
   constructor(type, id, initializer) {
     Object.assign(this, { type, id, initializer });
-    console.log(id + ": ");
-    console.log(initializer);
   }
 }
 
@@ -233,6 +233,7 @@ module.exports = {
   DictionaryType,
   ForStatement,
   Func,
+  FunctionObject,
   IfStatement,
   KeyValPair,
   LargeBlock,
