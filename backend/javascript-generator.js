@@ -13,6 +13,7 @@
  *   generate(tigerExpression);
  */
 
+<<<<<<< HEAD
 const beautify = require("js-beautify");
 const {
   ArrayExp,
@@ -37,6 +38,10 @@ const {
   Variable,
   WhileExp,
 } = require("../ast");
+=======
+//const beautify = require("js-beautify");
+const prettyJs = require("pretty-js");
+>>>>>>> origin/krystensBranch
 
 const {
   Argument,
@@ -55,10 +60,16 @@ const {
   IfStatement,
   KeyValPair,
   LargeBlock,
+<<<<<<< HEAD
   ArrayExpression,
   NumericLiteral,
   Null,
   NullType,
+=======
+  Null,
+  NullType,
+  NumericLiteral,
+>>>>>>> origin/krystensBranch
   NumType,
   Parameter,
   Program,
@@ -74,6 +85,7 @@ const {
   WhileStatement,
 } = require("../ast");
 
+<<<<<<< HEAD
 const { StringType } = require("../semantics/builtins");
 
 function makeOp(op) {
@@ -84,6 +96,12 @@ function makeOp(op) {
 // Param, or Func, and produces a JavaScript name by appending a unique identifying
 // suffix, such as '_1' or '_503'. It uses a cache so it can return the same exact
 // string each time it is called with a particular entity.
+=======
+// function makeOp(op) {
+//   return { "=": "===", "<>": "!==", "&": "&&", "|": "||" }[op] || op;
+// }
+
+>>>>>>> origin/krystensBranch
 const javaScriptId = (() => {
   let lastId = 0;
   const map = new Map();
@@ -95,6 +113,7 @@ const javaScriptId = (() => {
   };
 })();
 
+<<<<<<< HEAD
 // Let's inline the built-in functions, because we can!
 const builtin = {
   print([s]) {
@@ -159,6 +178,59 @@ Break.prototype.gen = function () {
 };
 
 Call.prototype.gen = function () {
+=======
+const builtin = {
+  pwint([s]) {
+    return `console.log(${s})`;
+  },
+  length([s]) {
+    return `${s}.length`;
+  },
+  substwing([s, i, n]) {
+    return `${s}.substr(${i}, ${n})`;
+  },
+  concat([s, t]) {
+    return `${s}.concat(${t})`;
+  },
+  exit(code) {
+    return `process.exit(${code})`;
+  },
+};
+
+// module.exports = function(exp) {
+//   return beautify(exp.gen(), { indent_size: 2 });
+// };
+
+function generateBlock(block) {
+  return block.map((s) => `${s.gen()};`).join("");
+}
+
+module.exports = function(exp) {
+  return prettyJs(generateBlock(exp.statements), { indent: "  " });
+};
+
+ArrayExpression.prototype.gen = function() {
+  return `Array(${this.size.gen()}).fill(${this.fill.gen()})`;
+};
+
+AssignmentStatement.prototype.gen = function() {
+  return `${this.target.gen()} = ${this.source.gen()}`;
+};
+
+BinaryExpression.prototype.gen = function() {
+  return `(${this.left.gen()} ${makeOp(this.op)} ${this.right.gen()})`;
+};
+
+BooleanLiteral.prototype.gen = function() {
+  return `${this.value}`;
+};
+
+BreakStatement.prototype.gen = function() {
+  return "break";
+};
+
+Call.prototype.gen = function() {
+>>>>>>> origin/krystensBranch
   const args = this.args.map((a) => a.gen());
   if (this.callee.builtin) {
     return builtin[this.callee.id](args);
@@ -166,6 +238,7 @@ Call.prototype.gen = function () {
   return `${javaScriptId(this.callee)}(${args.join(",")})`;
 };
 
+<<<<<<< HEAD
 ExpSeq.prototype.gen = function () {
   return this.exps.map((e) => e.gen()).join(";");
 };
@@ -236,5 +309,20 @@ Variable.prototype.gen = function () {
 };
 
 WhileExp.prototype.gen = function () {
+=======
+Func.prototype.gen = function() {
+  const name = javaScriptId(this);
+  const params = this.parameters
+    ? this.parameters.map((p) => javaScriptId(p))
+    : [""];
+  return `function ${name} (${params.join(",")}) {${this.body.gen()}}`;
+};
+
+Variable.prototype.gen = function() {
+  return `let ${javaScriptId(this)} = ${this.init.gen()}`;
+};
+
+WhileStatement.prototype.gen = function() {
+>>>>>>> origin/krystensBranch
   return `while (${this.test.gen()}) { ${this.body.gen()} }`;
 };

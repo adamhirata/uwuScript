@@ -1,4 +1,5 @@
 const { StandardFunctions } = require("./builtins");
+const { Func } = require("../ast");
 
 class Context {
   constructor({ parent = null, currentFunction = null, inLoop = false } = {}) {
@@ -54,6 +55,13 @@ class Context {
   assertInFunction(message) {
     if (!this.currentFunction) {
       throw new Error(message);
+    }
+  }
+
+  isFunction(entity) {
+    const condition = entity instanceof Func;
+    if (!condition) {
+      throw new Error("Object is not a function!");
     }
   }
 }

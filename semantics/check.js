@@ -7,6 +7,7 @@ const {
   ArrayType,
   DictionaryType,
   Func,
+  FunctionObject,
 } = require("../ast");
 
 function doCheck(condition, message) {
@@ -14,6 +15,32 @@ function doCheck(condition, message) {
     throw new Error(message);
   }
 }
+
+// function isAssignableTo(exp, type) {
+//   if (
+//     exp.type.constructor === DictionaryType &&
+//     type.constructor === DictionaryType
+//   ) {
+//     exp.members.forEach((m) => {
+//       isAssignableTo(m.exp1, type.type1);
+//       isAssignableTo(m.exp2, type.type2);
+//     });
+//   } else if (
+//     exp.type.constructor === ArrayType &&
+//     type.constructor === ArrayType
+//   ) {
+//     exp.members.forEach((m) => {
+//       isAssignableTo(m, type.type);
+//     });
+//   } else if (exp.type === NullType) {
+//   } else {
+//     doCheck(
+//       exp.type === type,
+//       `expression of type ${util.format(exp.type)}
+//      is not compatible with ${util.format(type)} ಥ_ಥ`
+//     );
+//   }
+// }
 
 function isAssignableTo(exp, type) {
   if (
@@ -43,7 +70,6 @@ function isAssignableTo(exp, type) {
 
 module.exports = {
   isNumber(exp) {
-    console.log(NumType);
     doCheck(exp.type === NumType, "Not a Numbwer ಥ_ಥ");
   },
 
@@ -70,11 +96,11 @@ module.exports = {
     );
   },
 
-  isAssignableTo,
+  //isAssignableTo,
 
-  isFunction(value) {
-    doCheck(value instanceof Func, "Not a function ಥ_ಥ");
-  },
+  // isFunction(entity) {
+  //   doCheck(entity.constructor instanceof FunctionObject, "Not a function ಥ_ಥ");
+  // },
 
   isCollectionType(e) {
     return e.constructor === ArrayType || e.constructor === DictionaryType;
@@ -85,6 +111,6 @@ module.exports = {
       args.length === params.length,
       `expected ${params.length} arguments, recieved ${args.length} ಥ_ಥ`
     );
-    args.forEach((arg, i) => this.isAssignableTo(arg, params[i].type));
+    isAssignableTo(args, params);
   },
 };
