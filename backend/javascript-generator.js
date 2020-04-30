@@ -4,16 +4,16 @@
  * Requiring this module adds a gen() method to each of the AST classes, except
  * for types, and fields, which don’t figure into code generation. It exports a
  * function that generates a complete, pretty-printed JavaScript program for a
- * Tiger expression, bundling the translation of the Tiger standard library with
+ * uwuScript expression, bundling the translation of the uwuScript standard library with
  * the expression's translation.
  *
  * Each gen() method returns a fragment of JavaScript.
  *
  *   const generate = require('./backend/javascript-generator');
- *   generate(tigerExpression);
+ *   generate(uwuScriptExpression);
  */
 
-//const beautify = require("js-beautify");
+const beautify = require("js-beautify");
 const prettyJs = require("pretty-js");
 
 const {
@@ -84,16 +84,17 @@ const builtin = {
   },
 };
 
-// module.exports = function(exp) {
-//   return beautify(exp.gen(), { indent_size: 2 });
-// };
-
 function generateBlock(block) {
+  // console.log("[BLOCK]: ", block);
   return block.map((s) => `${s.gen()};`).join("");
 }
-
 module.exports = function(exp) {
-  return prettyJs(generateBlock(exp.statements), { indent: "  " });
+  //console.log("EXP STATEMENT", exp.statements);
+  return beautify(generateBlock(exp.statements), { indent_size: 2 });
+};
+
+Argument.prototype.gen = function() {
+  return this.expression.gen();
 };
 
 ArrayExpression.prototype.gen = function() {
@@ -118,10 +119,12 @@ BreakStatement.prototype.gen = function() {
 
 Call.prototype.gen = function() {
   const args = this.args.map((a) => a.gen());
-  if (this.callee.builtin) {
+  //console.log("[CALL CALLEE]", this.callee);
+  if (this.callee.value.builtin) {
+    console.log("true");
     return builtin[this.callee.id](args);
   }
-  return `${javaScriptId(this.callee)}(${args.join(",")})`;
+  return `${this.callee.gen()}(${args.join(",")})`;
 };
 
 Func.prototype.gen = function() {
@@ -130,6 +133,11 @@ Func.prototype.gen = function() {
     ? this.parameters.map((p) => javaScriptId(p))
     : [""];
   return `function ${name} (${params.join(",")}) {${this.body.gen()}}`;
+};
+
+StringLiteral.prototype.gen = function() {
+  //console.log("STRING LIT GEN", this.value);
+  return `${this.value}`;
 };
 
 Variable.prototype.gen = function() {

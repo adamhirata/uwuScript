@@ -16,56 +16,19 @@ function doCheck(condition, message) {
   }
 }
 
-// function isAssignableTo(exp, type) {
-//   if (
-//     exp.type.constructor === DictionaryType &&
-//     type.constructor === DictionaryType
-//   ) {
-//     exp.members.forEach((m) => {
-//       isAssignableTo(m.exp1, type.type1);
-//       isAssignableTo(m.exp2, type.type2);
-//     });
-//   } else if (
-//     exp.type.constructor === ArrayType &&
-//     type.constructor === ArrayType
-//   ) {
-//     exp.members.forEach((m) => {
-//       isAssignableTo(m, type.type);
-//     });
-//   } else if (exp.type === NullType) {
-//   } else {
-//     doCheck(
-//       exp.type === type,
-//       `expression of type ${util.format(exp.type)}
-//      is not compatible with ${util.format(type)} ಥ_ಥ`
-//     );
-//   }
-// }
-
 function isAssignableTo(exp, type) {
-  if (
-    exp.type.constructor === DictionaryType &&
-    type.constructor === DictionaryType
-  ) {
-    exp.members.forEach((m) => {
-      isAssignableTo(m.exp1, type.type1);
-      isAssignableTo(m.exp2, type.type2);
-    });
-  } else if (
-    exp.type.constructor === ArrayType &&
-    type.constructor === ArrayType
-  ) {
-    exp.members.forEach((m) => {
-      isAssignableTo(m, type.type);
-    });
-  } else if (exp.type === NullType) {
-  } else {
-    doCheck(
-      exp.type === type,
-      `expression of type ${util.format(exp.type)}
-     is not compatible with ${util.format(type)} ಥ_ಥ`
-    );
-  }
+  console.log(
+    "[EXP]: ",
+    JSON.stringify(exp.type),
+    "[TYPE]",
+    JSON.stringify(type),
+    "Are they equal?",
+    JSON.stringify(exp.type) === JSON.stringify(type)
+  );
+  doCheck(
+    JSON.stringify(exp.type) === JSON.stringify(type),
+    `Types are not compatible`
+  );
 }
 
 module.exports = {
@@ -96,11 +59,11 @@ module.exports = {
     );
   },
 
-  //isAssignableTo,
+  isAssignableTo,
 
-  // isFunction(entity) {
-  //   doCheck(entity.constructor instanceof FunctionObject, "Not a function ಥ_ಥ");
-  // },
+  isFunction(entity) {
+    doCheck(entity.constructor instanceof FunctionObject, "Not a function ಥ_ಥ");
+  },
 
   isCollectionType(e) {
     return e.constructor === ArrayType || e.constructor === DictionaryType;
