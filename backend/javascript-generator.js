@@ -4,17 +4,16 @@
  * Requiring this module adds a gen() method to each of the AST classes, except
  * for types, and fields, which don’t figure into code generation. It exports a
  * function that generates a complete, pretty-printed JavaScript program for a
- * Tiger expression, bundling the translation of the Tiger standard library with
+ * uwuScript expression, bundling the translation of the uwuScript standard library with
  * the expression's translation.
  *
  * Each gen() method returns a fragment of JavaScript.
  *
  *   const generate = require('./backend/javascript-generator');
- *   generate(tigerExpression);
+ *   generate(uwuScriptExpression);
  */
 
-//const beautify = require("js-beautify");
-const prettyJs = require("pretty-js");
+const beautify = require("js-beautify");
 
 const {
   Argument,
@@ -84,55 +83,54 @@ const builtin = {
   },
 };
 
-// module.exports = function(exp) {
-//   return beautify(exp.gen(), { indent_size: 2 });
-// };
-
 function generateBlock(block) {
+  // console.log("[BLOCK]: ", block);
   return block.map((s) => `${s.gen()};`).join("");
 }
-
-module.exports = function (exp) {
-  return prettyJs(generateBlock(exp.statements), { indent: "  " });
+module.exports = function(exp) {
+  //console.log("EXP STATEMENT", exp.statements);
+  return beautify(generateBlock(exp.statements), { indent_size: 2 });
 };
 
-Argument.prototype.gen = function () {
-  if (this.id) {
-    return `${this.id.gen()} = ${this.expression.gen()}`;
-  } else {
-    return `${this.expression.gen()}`;
-  }
+Argument.prototype.gen = function() {
+  return this.expression.gen();
 };
 
-ArrayExpression.prototype.gen = function () {
+Argument.prototype.gen = function() {
+  return this.expression.gen();
+};
+
+ArrayExpression.prototype.gen = function() {
   return `Array(${this.size.gen()}).fill(${this.fill.gen()})`;
 };
 
-AssignmentStatement.prototype.gen = function () {
+AssignmentStatement.prototype.gen = function() {
   return `${this.target.gen()} = ${this.source.gen()}`;
 };
 
-BinaryExpression.prototype.gen = function () {
+BinaryExpression.prototype.gen = function() {
   return `(${this.left.gen()} ${makeOp(this.op)} ${this.right.gen()})`;
 };
 
-BooleanLiteral.prototype.gen = function () {
+BooleanLiteral.prototype.gen = function() {
   return `${this.value}`;
 };
 
-BreakStatement.prototype.gen = function () {
+BreakStatement.prototype.gen = function() {
   return "break";
 };
 
-Call.prototype.gen = function () {
+Call.prototype.gen = function() {
   const args = this.args.map((a) => a.gen());
-  if (this.callee.builtin) {
+  //console.log("[CALL CALLEE]", this.callee);
+  if (this.callee.value.builtin) {
+    console.log("true");
     return builtin[this.callee.id](args);
   }
-  return `${javaScriptId(this.callee)}(${args.join(",")})`;
+  return `${this.callee.gen()}(${args.join(",")})`;
 };
 
-Func.prototype.gen = function () {
+Func.prototype.gen = function() {
   const name = javaScriptId(this);
   const params = this.parameters
     ? this.parameters.map((p) => javaScriptId(p))
@@ -140,10 +138,15 @@ Func.prototype.gen = function () {
   return `function ${name} (${params.join(",")}) {${this.body.gen()}}`;
 };
 
-Variable.prototype.gen = function () {
+StringLiteral.prototype.gen = function() {
+  //console.log("STRING LIT GEN", this.value);
+  return `${this.value}`;
+};
+
+Variable.prototype.gen = function() {
   return `let ${javaScriptId(this)} = ${this.init.gen()}`;
 };
 
-WhileStatement.prototype.gen = function () {
+WhileStatement.prototype.gen = function() {
   return `while (${this.test.gen()}) { ${this.body.gen()} }`;
 };

@@ -41,6 +41,7 @@ module.exports = function (exp) {
 };
 
 Argument.prototype.analyze = function (context) {
+  //console.log("[ARGUMENT EXP]: ", this.expression);
   this.expression.analyze(context);
 };
 
@@ -96,6 +97,15 @@ Call.prototype.analyze = function (context) {
   this.callee.analyze(context);
   this.args.forEach((a) => a.analyze(context));
   this.type = this.callee.type;
+  // console.log(
+  //   "[CALLEE OBJECT]: ",
+  //   this.callee,
+  //   "[VALUE]: ",
+  //   this.callee.value,
+  //   "[PARAMS]: ",
+  //   this.callee.value.function.params[0]
+  // );
+  // console.log("[ARGS]: ", this.args[0].expression);
 
   context.isFunction(this.callee.value);
   this.args.forEach((a, i) => {
@@ -222,7 +232,14 @@ UnaryExpression.prototype.analyze = function (context) {
 };
 
 VariableDeclaration.prototype.analyze = function (context) {
+  // console.log(
+  //   "[VD CONTEXT INITIALIZER]: ",
+  //   this.initializer,
+  //   "[VD CONTEXT TYPE]: ",
+  //   this.type
+  // );
   this.initializer.analyze(context);
+  console.log("[INITIALIZER TYPE]:", this.initializer, "[TYPE]", this.type);
   check.isAssignableTo(this.initializer, this.type);
   context.add(this);
 };

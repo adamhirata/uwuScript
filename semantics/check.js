@@ -16,85 +16,53 @@ function doCheck(condition, message) {
   }
 }
 
-// function isAssignableTo(exp, type) {
-//   if (
-//     exp.type.constructor === DictionaryType &&
-//     type.constructor === DictionaryType
-//   ) {
-//     exp.members.forEach((m) => {
-//       isAssignableTo(m.exp1, type.type1);
-//       isAssignableTo(m.exp2, type.type2);
-//     });
-//   } else if (
-//     exp.type.constructor === ArrayType &&
-//     type.constructor === ArrayType
-//   ) {
-//     exp.members.forEach((m) => {
-//       isAssignableTo(m, type.type);
-//     });
-//   } else if (exp.type === NullType) {
-//   } else {
-//     doCheck(
-//       exp.type === type,
-//       `expression of type ${util.format(exp.type)}
-//      is not compatible with ${util.format(type)} ಥ_ಥ`
-//     );
-//   }
-// }
-
-// function isAssignableTo(exp, type) {
-//   console.log("oof");
-//   console.log(type);
-//   if (
-//     exp.type.constructor === DictionaryType &&
-//     type.constructor === DictionaryType
-//   ) {
-//     exp.members.forEach((m) => {
-//       isAssignableTo(m.exp1, type.type1);
-//       isAssignableTo(m.exp2, type.type2);
-//     });
-//   } else if (
-//     exp.type.constructor === ArrayType &&
-//     type.constructor === ArrayType
-//   ) {
-//     console.log("oofers");
-//     exp.members.forEach((m) => {
-//       isAssignableTo(m, type.type);
-//     });
-//   } else if (exp.type === NullType) {
-//   } else {
-//     doCheck(
-//       exp.type === type,
-//       `expression of type ${util.format(exp.type)}
-//      is not compatible with ${util.format(type)} ಥ_ಥ`
-//     );
-//   }
-//}
-
-function isAssignableTo(exp, type) {
-  // if (exp.type === NullType) {
-  // } else {
-  //   doCheck(
-  //     JSON.stringify(exp.type) === JSON.stringify(type),
-  //     "Types are not compatible"
-  //   );
-  // }
+function isArray(exp) {
   doCheck(
-    JSON.stringify(exp.type) === JSON.stringify(type),
-    "Types are not compatible"
+    JSON.stringify(exp.type) === JSON.stringify(ArrayType),
+    "Not an Awway/Aww ಥ_ಥ"
   );
 }
 
-function isNumber(exp) {
+function isAssignableTo(exp, type) {
+  console.log(
+    "[EXP]: ",
+    JSON.stringify(exp.type),
+    "[TYPE]",
+    JSON.stringify(type),
+    "Are they equal?",
+    JSON.stringify(exp.type) === JSON.stringify(type)
+  );
   doCheck(
-    JSON.stringify(exp.type) === JSON.stringify(NumType),
-    "Not a Numbwer ಥ_ಥ"
+    JSON.stringify(exp.type) === JSON.stringify(type),
+    `Types are not compatible`
   );
 }
 
 function isBoolean(exp) {
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(BooleanType),
+    "Not a Numbwer ಥ_ಥ"
+  );
+}
+
+function isCollectionType(e) {
+  return e.constructor === ArrayType || e.constructor === DictionaryType;
+}
+
+function isDictionary(exp) {
+  doCheck(
+    JSON.stringify(exp.type) === JSON.stringify(DictionaryType),
+    "Not a Dictionawy ಥ_ಥ"
+  );
+}
+
+function isFunction(entity) {
+  doCheck(entity.constructor instanceof FunctionObject, "Not a function ಥ_ಥ");
+}
+
+function isNumber(exp) {
+  doCheck(
+    JSON.stringify(exp.type) === JSON.stringify(NumType),
     "Not a Numbwer ಥ_ಥ"
   );
 }
@@ -106,53 +74,31 @@ function isString(exp) {
   );
 }
 
-function isArray(exp) {
+function legalArugments(args, params) {
   doCheck(
-    JSON.stringify(exp.type) === JSON.stringify(ArrayType),
-    "Not an Awway/Aww ಥ_ಥ"
+    args.length === params.length,
+    `expected ${params.length} arguments, recieved ${args.length} ಥ_ಥ`
   );
+  isAssignableTo(args, params);
 }
 
-function isDictionary(exp) {
+function sameType(exp1, exp2) {
   doCheck(
-    JSON.stringify(exp.type) === JSON.stringify(DictionaryType),
-    "Not a Dictionawy ಥ_ಥ"
+    exp1.type === exp2.type,
+    "expressions must have same type ＼（＾○＾）人（＾○＾）／"
   );
 }
 
 module.exports = {
-  isNumber,
-
-  isBoolean,
-
-  isString,
-
+  doCheck,
   isArray,
-
-  isDictionary,
-
-  sameType(exp1, exp2) {
-    doCheck(
-      exp1.type === exp2.type,
-      "expressions must have same type ＼（＾○＾）人（＾○＾）／"
-    );
-  },
-
   isAssignableTo,
-
-  // isFunction(entity) {
-  //   doCheck(entity.constructor instanceof FunctionObject, "Not a function ಥ_ಥ");
-  // },
-
-  isCollectionType(e) {
-    return e.constructor === ArrayType || e.constructor === DictionaryType;
-  },
-
-  legalArugments(args, params) {
-    doCheck(
-      args.length === params.length,
-      `expected ${params.length} arguments, recieved ${args.length} ಥ_ಥ`
-    );
-    isAssignableTo(args, params);
-  },
+  isBoolean,
+  isCollectionType,
+  isDictionary,
+  isFunction,
+  isNumber,
+  isString,
+  legalArugments,
+  sameType,
 };
