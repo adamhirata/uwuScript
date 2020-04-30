@@ -97,11 +97,7 @@ Argument.prototype.gen = function() {
 };
 
 Argument.prototype.gen = function() {
-  if (this.id) {
-    return `${this.id.gen()} = ${this.expression.gen()}`;
-  } else {
-    return `${this.expression.gen()}`;
-  }
+  return this.expression.gen();
 };
 
 ArrayExpression.prototype.gen = function() {
