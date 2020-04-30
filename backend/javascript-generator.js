@@ -13,35 +13,8 @@
  *   generate(tigerExpression);
  */
 
-<<<<<<< HEAD
-const beautify = require("js-beautify");
-const {
-  ArrayExp,
-  Assignment,
-  BinaryExp,
-  Binding,
-  Break,
-  Call,
-  ExpSeq,
-  ForExp,
-  Func,
-  IdExp,
-  IfExp,
-  LetExp,
-  Literal,
-  MemberExp,
-  NegationExp,
-  Nil,
-  RecordExp,
-  SubscriptedExp,
-  TypeDec,
-  Variable,
-  WhileExp,
-} = require("../ast");
-=======
 //const beautify = require("js-beautify");
 const prettyJs = require("pretty-js");
->>>>>>> origin/krystensBranch
 
 const {
   Argument,
@@ -60,16 +33,9 @@ const {
   IfStatement,
   KeyValPair,
   LargeBlock,
-<<<<<<< HEAD
-  ArrayExpression,
-  NumericLiteral,
-  Null,
-  NullType,
-=======
   Null,
   NullType,
   NumericLiteral,
->>>>>>> origin/krystensBranch
   NumType,
   Parameter,
   Program,
@@ -85,23 +51,10 @@ const {
   WhileStatement,
 } = require("../ast");
 
-<<<<<<< HEAD
-const { StringType } = require("../semantics/builtins");
-
-function makeOp(op) {
-  return { "=": "===", "<>": "!==", "&": "&&", "|": "||" }[op] || op;
-}
-
-// javaScriptId(e) takes any Tiger object with an id property, such as a Variable,
-// Param, or Func, and produces a JavaScript name by appending a unique identifying
-// suffix, such as '_1' or '_503'. It uses a cache so it can return the same exact
-// string each time it is called with a particular entity.
-=======
 // function makeOp(op) {
 //   return { "=": "===", "<>": "!==", "&": "&&", "|": "||" }[op] || op;
 // }
 
->>>>>>> origin/krystensBranch
 const javaScriptId = (() => {
   let lastId = 0;
   const map = new Map();
@@ -113,72 +66,6 @@ const javaScriptId = (() => {
   };
 })();
 
-<<<<<<< HEAD
-// Let's inline the built-in functions, because we can!
-const builtin = {
-  print([s]) {
-    return `console.log(${s})`;
-  },
-  size([s]) {
-    return `${s}.length`;
-  },
-};
-
-module.exports = function (exp) {
-  return beautify(exp.gen(), { indent_size: 2 });
-};
-
-// This only exists because Tiger is expression-oriented and JavaScript is not.
-// It's pretty crazy! In the case where the expression is actually a sequence,
-// we have to dig in and stick a 'return' before the last expression. And this
-// as to be recursive, because the last expression of a sequence could actually
-// be a sequence....
-function makeReturn(exp) {
-  if (exp.constructor === LetExp) {
-    const filteredDecs = exp.decs.filter((d) => d.constructor !== TypeDec);
-    const all = [...filteredDecs, ...exp.body.slice(0, -1)].map((e) => e.gen());
-    all.push(makeReturn(exp.body[exp.body.length - 1]));
-    return all.join(";");
-  }
-  if (exp.constructor === ExpSeq) {
-    const generated = exp.exps.slice(0, -1).map((e) => e.gen());
-    generated.push(makeReturn(exp.exps[exp.exps.length - 1]));
-    return generated.join(";");
-  }
-  return `return ${exp.gen()}`;
-}
-
-Argument.prototype.gen = function () {
-  if (this.id) {
-    return `${this.id.gen()} = ${this.expression.gen()}`;
-  } else {
-    return `${this.expression.gen()}`;
-  }
-};
-
-ArrayExpression.prototype.gen = function () {
-  const jsArray = this.members.map((member) => member.gen());
-  return `[${jsArray.join(",")}]`;
-};
-
-Assignment.prototype.gen = function () {
-  return `${this.target.gen()} = ${this.source.gen()}`;
-};
-
-BinaryExp.prototype.gen = function () {
-  return `(${this.left.gen()} ${makeOp(this.op)} ${this.right.gen()})`;
-};
-
-Binding.prototype.gen = function () {
-  return `${this.id} : ${this.value.gen()}`;
-};
-
-Break.prototype.gen = function () {
-  return "break";
-};
-
-Call.prototype.gen = function () {
-=======
 const builtin = {
   pwint([s]) {
     return `console.log(${s})`;
@@ -205,32 +92,39 @@ function generateBlock(block) {
   return block.map((s) => `${s.gen()};`).join("");
 }
 
-module.exports = function(exp) {
+module.exports = function (exp) {
   return prettyJs(generateBlock(exp.statements), { indent: "  " });
 };
 
-ArrayExpression.prototype.gen = function() {
+Argument.prototype.gen = function () {
+  if (this.id) {
+    return `${this.id.gen()} = ${this.expression.gen()}`;
+  } else {
+    return `${this.expression.gen()}`;
+  }
+};
+
+ArrayExpression.prototype.gen = function () {
   return `Array(${this.size.gen()}).fill(${this.fill.gen()})`;
 };
 
-AssignmentStatement.prototype.gen = function() {
+AssignmentStatement.prototype.gen = function () {
   return `${this.target.gen()} = ${this.source.gen()}`;
 };
 
-BinaryExpression.prototype.gen = function() {
+BinaryExpression.prototype.gen = function () {
   return `(${this.left.gen()} ${makeOp(this.op)} ${this.right.gen()})`;
 };
 
-BooleanLiteral.prototype.gen = function() {
+BooleanLiteral.prototype.gen = function () {
   return `${this.value}`;
 };
 
-BreakStatement.prototype.gen = function() {
+BreakStatement.prototype.gen = function () {
   return "break";
 };
 
-Call.prototype.gen = function() {
->>>>>>> origin/krystensBranch
+Call.prototype.gen = function () {
   const args = this.args.map((a) => a.gen());
   if (this.callee.builtin) {
     return builtin[this.callee.id](args);
@@ -238,79 +132,7 @@ Call.prototype.gen = function() {
   return `${javaScriptId(this.callee)}(${args.join(",")})`;
 };
 
-<<<<<<< HEAD
-ExpSeq.prototype.gen = function () {
-  return this.exps.map((e) => e.gen()).join(";");
-};
-
-ForExp.prototype.gen = function () {
-  const i = javaScriptId(this.index);
-  const low = this.low.gen();
-  const hi = javaScriptId(new Variable("hi"));
-  const preAssign = `let ${hi} = ${this.high.gen()};`;
-  const loopControl = `for (let ${i} = ${low}; ${i} <= ${hi}; ${i}++)`;
-  const body = this.body.gen();
-  return `${preAssign} ${loopControl} {${body}}`;
-};
-
 Func.prototype.gen = function () {
-  const name = javaScriptId(this);
-  const params = this.params.map(javaScriptId);
-  // "Void" functions do not have a JS return, others do
-  const body = this.body.type ? makeReturn(this.body) : this.body.gen();
-  return `function ${name} (${params.join(",")}) {${body}}`;
-};
-
-IdExp.prototype.gen = function () {
-  return javaScriptId(this.ref);
-};
-
-IfExp.prototype.gen = function () {
-  const thenPart = this.consequent.gen();
-  const elsePart = this.alternate ? this.alternate.gen() : "null";
-  return `((${this.test.gen()}) ? (${thenPart}) : (${elsePart}))`;
-};
-
-LetExp.prototype.gen = function () {
-  if (this.type) {
-    // This looks insane, but let-expressions really are closures!
-    return `(() => {${makeReturn(this)} ; })()`;
-  }
-  const filteredDecs = this.decs.filter((d) => d.constructor !== TypeDec);
-  return [...filteredDecs, ...this.body].map((e) => e.gen()).join(";");
-};
-
-Literal.prototype.gen = function () {
-  return this.type === StringType ? `"${this.value}"` : this.value;
-};
-
-MemberExp.prototype.gen = function () {
-  return `${this.record.gen()}.${this.id}`;
-};
-
-SubscriptedExp.prototype.gen = function () {
-  return `${this.array.gen()}[${this.subscript.gen()}]`;
-};
-
-NegationExp.prototype.gen = function () {
-  return `(- (${this.operand.gen()}))`;
-};
-
-Nil.prototype.gen = function () {
-  return "null";
-};
-
-RecordExp.prototype.gen = function () {
-  return `{${this.bindings.map((b) => b.gen()).join(",")}}`;
-};
-
-Variable.prototype.gen = function () {
-  return `let ${javaScriptId(this)} = ${this.init.gen()}`;
-};
-
-WhileExp.prototype.gen = function () {
-=======
-Func.prototype.gen = function() {
   const name = javaScriptId(this);
   const params = this.parameters
     ? this.parameters.map((p) => javaScriptId(p))
@@ -318,11 +140,10 @@ Func.prototype.gen = function() {
   return `function ${name} (${params.join(",")}) {${this.body.gen()}}`;
 };
 
-Variable.prototype.gen = function() {
+Variable.prototype.gen = function () {
   return `let ${javaScriptId(this)} = ${this.init.gen()}`;
 };
 
-WhileStatement.prototype.gen = function() {
->>>>>>> origin/krystensBranch
+WhileStatement.prototype.gen = function () {
   return `while (${this.test.gen()}) { ${this.body.gen()} }`;
 };
