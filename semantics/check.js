@@ -5,10 +5,7 @@ const {
   BooleanType,
   ArrayType,
   DictionaryType,
-  Func,
-  FunctionObject,
-} = require("../ast");
-//const util = require("util");
+} = require("../semantics/builtins");
 
 function doCheck(condition, message) {
   if (!condition) {
@@ -24,7 +21,6 @@ function isArray(exp) {
 }
 
 function isAssignableTo(exp, type) {
-  console.log(exp);
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(type),
     `Types are not compatible`
@@ -54,7 +50,7 @@ function isFunction(entity) {
 }
 
 function isNumber(exp) {
-  console.log(NumType);
+  //console.log("[EXP TYPE]: ", exp.type, "[NUM TYPE]: ", NumType);
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(NumType),
     "Not a Numbwer ಥ_ಥ"

@@ -1,5 +1,3 @@
-const check = require("../semantics/check");
-
 class Argument {
   constructor(id, expression) {
     Object.assign(this, { id, expression });
@@ -61,47 +59,6 @@ class FunctionObject {
   constructor(type, id, params, body) {
     Object.assign(this, { type, id, params, body });
   }
-
-  analyze(context) {
-    this.params = this.params.map((p) => {
-      new Parameter(p.type, p.id);
-    });
-    this.params.forEach((p) => p.analyze(context));
-    if (this.body.type === LargeBlock) {
-      this.body.forEach((sm) => sm.analyze(context));
-      const rs = this.body.filter((b) => b.constructor === ReturnStatement);
-      if (rs.length === 0 && this.type !== "void") {
-        throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
-      } else if (returnStatement.length > 0) {
-        if (this.type === "void") {
-          throw new Error(
-            "Void functions cannot have retuwn statements (」°ロ°)」"
-          );
-        }
-        rs.forEach((sm) =>
-          check.isAssignableTo(sm.returnValue.type, this.type)
-        );
-      }
-    } else {
-      this.body.analyze(context);
-      if (
-        this.body.simpleStmt.constructor === ReturnStatement &&
-        this.type === "void"
-      ) {
-        throw new Error(
-          "Void functions cannot have retuwn statements (」°ロ°)」"
-        );
-      } else if (
-        this.body.simpleStmt.constructor !== ReturnStatement &&
-        this.type !== "void"
-      ) {
-        throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
-      }
-      check.isAssignableTo(this.body.simpleStmt.returnValue, this.type);
-    }
-
-    //Go through the function to look for return statements
-  }
 }
 
 class IfStatement {
@@ -151,7 +108,7 @@ class Parameter {
 
 class PrimitiveType {
   constructor(type) {
-    this.type = type;
+    Object.assign(this, { type });
   }
 }
 
@@ -214,11 +171,6 @@ class WhileStatement {
   }
 }
 
-const NullType = new PrimitiveType("null");
-const NumType = new PrimitiveType("Numbwer");
-const StringType = new PrimitiveType("Stwing");
-const BooleanType = new PrimitiveType("Boowean");
-
 module.exports = {
   Argument,
   ArrayExpression,
@@ -226,7 +178,6 @@ module.exports = {
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
-  BooleanType,
   BreakStatement,
   Call,
   DictionaryExpression,
@@ -240,13 +191,11 @@ module.exports = {
   ArrayExpression,
   NumericLiteral,
   Null,
-  NullType,
-  NumType,
+  PrimitiveType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
-  StringType,
   SubscriptedExpression,
   TernaryStatement,
   TinyBlock,

@@ -15,11 +15,62 @@ const fixture = {
       `,
     String.raw`console.log("Hello world");`,
   ],
-  // len: [
-  //   String.raw`Stwing s = "corgis"
-  // Numbwer s_len = length(s)
-  // `,
-  //   /let s_(\d+) = "corgis";\s*let s_len_\d+ = s_\1.length;/,
+  arithmetic: [
+    String.raw`6 * -9 + 420
+    `,
+    String.raw`((6 * (-9)) + 420)`,
+  ],
+  substring: [
+    String.raw`Stwing a = "adamhirata"
+    Stwing name = substwing(a, 0, 4)
+    `,
+    /let a_(\d+) = "adamhirata";\s*let name_\d+ = a_\1\.substring\(0, 4\);/,
+  ],
+  Assignment: [
+    String.raw`Numbwer x = 2
+    `,
+    /let x_(\d+) = 2;/,
+  ],
+  binary: [
+    String.raw`21 <= 23
+    4 != 20
+    twue && twue
+    twue != fawse
+    twue == !fawse
+    1000 + 98
+    (9 / 3) + ((2 * 6) % 4) - 1
+  `,
+    String.raw`(21 <= 23);
+(4 !== 20);
+(true && true);
+(true !== false);
+(true === (!false));
+(1000 + 98);
+(((9 / 3) + ((2 * 6) % 4)) - 1);`,
+  ],
+  ifStatement: [
+    String.raw`if (1 < 2) uwu 1 owo
+    `,
+    /if \(\(1 < 2\)\) \{\s*1;\s*\};/,
+  ],
+  ifElseIfStatement: [
+    String.raw`if (1 < 2)  uwu 1 owo
+ewse if (1 > 2) uwu 2 owo`,
+    /if \(\(1 < 2\)\) \{\s*1;\s*\} else if \(\(1 > 2\)\) \{\s*2;\s*\};/,
+  ],
+  ifElseIfElseStatement: [
+    String.raw`if (1 < 2) uwu 1 owo
+ewse if (1 > 2) uwu 2 owo
+ewse uwu 3 owo`,
+    /if \(\(1 < 2\)\) \{\s*1;\s*\} else if \(\(1 > 2\)\) \{\s*2;\s*\} else \{\s*3;\s*\};/,
+  ],
+  whileLoopWithBreak: [
+    String.raw`wile(twue) uwu bweak owo`,
+    /while \(true\) \{\s*break;\s*\};/,
+  ],
+  // forLoop: [
+  //   String.raw`fow i in 0...10 uwu pwint("Hi Toal :)") owo`,
+  //   /for \(let i_(\d+) = 0; i_\1 <= 10; i_\1 \+= 1\) \{\s*console.log\("Hi Toal :\)"\);\s*\};/,
   // ],
 };
 

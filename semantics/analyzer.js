@@ -5,7 +5,6 @@ const {
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
-  BooleanType,
   BreakStatement,
   Call,
   DictionaryExpression,
@@ -17,14 +16,11 @@ const {
   KeyValPair,
   LargeBlock,
   Null,
-  NullType,
   NumericLiteral,
-  NumType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
-  StringType,
   SubscriptedExpression,
   TernaryStatement,
   TinyBlock,
@@ -33,6 +29,12 @@ const {
   Variable,
   WhileStatement,
 } = require("../ast");
+const {
+  NullType,
+  NumType,
+  StringType,
+  BooleanType,
+} = require("../semantics/builtins");
 const check = require("./check");
 const Context = require("./context");
 
@@ -66,6 +68,8 @@ AssignmentStatement.prototype.analyze = function(context) {
 BinaryExpression.prototype.analyze = function(context) {
   this.left.analyze(context);
   this.right.analyze(context);
+  //console.log("[LEFT]", this.left);
+  //console.log("[RIGHT]", this.right);
 
   if (/[-+*/%]/.test(this.op)) {
     check.isNumber(this.left);
@@ -96,16 +100,10 @@ BreakStatement.prototype.analyze = function(context) {
 Call.prototype.analyze = function(context) {
   this.callee.analyze(context);
   this.args.forEach((a) => a.analyze(context));
-  this.type = this.callee.type;
-  // console.log(
-  //   "[CALLEE OBJECT]: ",
-  //   this.callee,
-  //   "[VALUE]: ",
-  //   this.callee.value,
-  //   "[PARAMS]: ",
-  //   this.callee.value.function.params[0]
-  // );
-  // console.log("[ARGS]: ", this.args[0].expression);
+
+  //console.log("[CALLEE VALUE]: ", this.callee.value);
+
+  this.type = this.callee.value.function.type;
 
   context.isFunction(this.callee.value);
   this.args.forEach((a, i) => {
@@ -136,8 +134,9 @@ DictionaryExpression.prototype.analyze = function(context) {
 ForStatement.prototype.analyze = function(context) {
   this.test1.analyze(context);
   this.test2.analyze(context);
-  const bodyContext = context.createChildContextForLoop();
-  this.body.forEach((n) => n.analyze(bodyContext));
+  const blockContext = context.createChildContextForLoop();
+  console.log("FOR BLOCK", this.block);
+  this.block.forEach((n) => n.analyze(blockContext));
 };
 
 Func.prototype.analyze = function(context) {
@@ -145,20 +144,57 @@ Func.prototype.analyze = function(context) {
   this.function.analyze(context.createChildContextForFunctionBody(this));
 };
 
+FunctionObject.prototype.analyze = function(context) {
+  this.params = this.params.map((p) => {
+    new Parameter(p.type, p.id);
+  });
+  this.params.forEach((p) => p.analyze(context));
+  if (this.body.type === LargeBlock) {
+    this.body.forEach((sm) => sm.analyze(context));
+    const rs = this.body.filter((b) => b.constructor === ReturnStatement);
+    if (rs.length === 0 && this.type !== "void") {
+      throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
+    } else if (returnStatement.length > 0) {
+      if (this.type === "void") {
+        throw new Error(
+          "Void functions cannot have retuwn statements (」°ロ°)」"
+        );
+      }
+      rs.forEach((sm) => check.isAssignableTo(sm.returnValue.type, this.type));
+    }
+  } else {
+    this.body.analyze(context);
+    if (
+      this.body.simpleStmt.constructor === ReturnStatement &&
+      this.type === "void"
+    ) {
+      throw new Error(
+        "Void functions cannot have retuwn statements (」°ロ°)」"
+      );
+    } else if (
+      this.body.simpleStmt.constructor !== ReturnStatement &&
+      this.type !== "void"
+    ) {
+      throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
+    }
+    check.isAssignableTo(this.body.simpleStmt.returnValue, this.type);
+  }
+};
+
 IfStatement.prototype.analyze = function(context) {
-  this.tests.forEach((test) => {
+  this.cases.forEach((test) => {
     test.analyze(context);
     check.isBoolean(test);
   });
-  this.consequents.map((block) => {
+  this.consequents.forEach((block) => {
     const blockContext = context.createChildContextForBlock();
-    block.map((statement) => {
+    block.simpleStmt.forEach((statement) => {
       statement.analyze(blockContext);
     });
   });
   if (this.alternate) {
     const alternateBlock = context.createChildContextForBlock();
-    this.alternate.map((s) => s.analyze(alternateBlock));
+    this.alternate.simpleStmt.forEach((s) => s.analyze(alternateBlock));
   }
 };
 
@@ -232,44 +268,23 @@ UnaryExpression.prototype.analyze = function(context) {
 };
 
 VariableDeclaration.prototype.analyze = function(context) {
-  // console.log(
-  //   "[VD CONTEXT INITIALIZER]: ",
-  //   this.initializer,
-  //   "[VD CONTEXT TYPE]: ",
-  //   this.type
-  // );
   this.initializer.analyze(context);
-  console.log("[INITIALIZER TYPE]:", this.initializer, "[TYPE]", this.type);
+  //console.log("[VARDEC]: ", this);
   check.isAssignableTo(this.initializer, this.type);
   context.add(this);
 };
 
 Variable.prototype.analyze = function(context) {
+  // console.log("[VARIABLE AST]: ", this, "\n[CONTEXT]: ", context);
   this.value = context.lookupValue(this.id);
+  //console.log("[VARIABLE LOOKUP]: ", this.value);
   this.type = this.value.type;
 };
 
 WhileStatement.prototype.analyze = function(context) {
   this.test.analyze(context);
   const bodyContext = context.createChildContextForLoop();
-  this.body.forEach((n) => n.analyze(bodyContext));
-};
-
-IfStatement.prototype.analyze = function(context) {
-  this.tests.forEach((test) => {
-    test.analyze(context);
-    check.isBoolean(test);
-  });
-  this.consequents.map((block) => {
-    const blockContext = context.createChildContextForBlock();
-    block.map((statement) => {
-      statement.analyze(blockContext);
-    });
-  });
-  if (this.alternate) {
-    const alternateBlock = context.createChildContextForBlock();
-    this.alternate.map((s) => s.analyze(alternateBlock));
-  }
+  this.body.simpleStmt.forEach((n) => n.analyze(bodyContext));
 };
 
 NumericLiteral.prototype.analyze = function(context) {
