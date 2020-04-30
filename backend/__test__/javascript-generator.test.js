@@ -15,12 +15,12 @@ const fixture = {
       `,
     String.raw`console.log("Hello world");`,
   ],
-  // len: [
-  //   String.raw`Stwing s = "corgis"
-  // Numbwer s_len = length(s)
-  // `,
-  //   /let s_(\d+) = "corgis";\s*let s_len_\d+ = s_\1.length;/,
-  // ],
+
+  arithmetic: [
+    String.raw`6 * -9 + 420
+  `,
+    String.raw`((6 * (-9)) + 420)`,
+  ],
 };
 
 describe("The JavaScript generator", () => {

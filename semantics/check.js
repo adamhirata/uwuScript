@@ -5,10 +5,7 @@ const {
   BooleanType,
   ArrayType,
   DictionaryType,
-  //Func,
-  //FunctionObject,
-} = require("../Ast");
-//const util = require("util");
+} = require("../semantics/builtins");
 
 function doCheck(condition, message) {
   if (!condition) {
@@ -24,14 +21,14 @@ function isArray(exp) {
 }
 
 function isAssignableTo(exp, type) {
-  console.log(
-    "[EXP]: ",
-    JSON.stringify(exp.type),
-    "[TYPE]",
-    JSON.stringify(type),
-    "Are they equal?",
-    JSON.stringify(exp.type) === JSON.stringify(type)
-  );
+  // console.log(
+  //   "[EXP]: ",
+  //   JSON.stringify(exp.type),
+  //   "[TYPE]",
+  //   JSON.stringify(type),
+  //   "Are they equal?",
+  //   JSON.stringify(exp.type) === JSON.stringify(type)
+  // );
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(type),
     `Types are not compatible`
@@ -61,6 +58,7 @@ function isFunction(entity) {
 }
 
 function isNumber(exp) {
+  console.log("[EXP TYPE]: ", exp.type, "[NUM TYPE]: ", NumType);
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(NumType),
     "Not a Numbwer ಥ_ಥ"
@@ -75,6 +73,8 @@ function isString(exp) {
 }
 
 function legalArugments(args, params) {
+  console.log("[LEGAL ARGS]: ", args);
+  console.log("[LEGAL PARAMS]: ", params);
   doCheck(
     args.length === params.length,
     `expected ${params.length} arguments, recieved ${args.length} ಥ_ಥ`

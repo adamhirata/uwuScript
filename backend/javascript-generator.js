@@ -50,9 +50,9 @@ const {
   WhileStatement,
 } = require("../ast");
 
-// function makeOp(op) {
-//   return { "=": "===", "<>": "!==", "&": "&&", "|": "||" }[op] || op;
-// }
+function makeOp(op) {
+  return { "==": "===", "!=": "!==" }[op] || op;
+}
 
 const javaScriptId = (() => {
   let lastId = 0;
@@ -109,6 +109,7 @@ AssignmentStatement.prototype.gen = function() {
 };
 
 BinaryExpression.prototype.gen = function() {
+  console.log("[THIS.RIGHT]: ", this.right);
   return `(${this.left.gen()} ${makeOp(this.op)} ${this.right.gen()})`;
 };
 
@@ -138,9 +139,17 @@ Func.prototype.gen = function() {
   return `function ${name} (${params.join(",")}) {${this.body.gen()}}`;
 };
 
+NumericLiteral.prototype.gen = function() {
+  return `${this.value}`;
+};
+
 StringLiteral.prototype.gen = function() {
   //console.log("STRING LIT GEN", this.value);
   return `${this.value}`;
+};
+
+UnaryExpression.prototype.gen = function() {
+  return `(${makeOp(this.op)} ${this.operand.gen()})`;
 };
 
 Variable.prototype.gen = function() {

@@ -5,7 +5,6 @@ const {
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
-  BooleanType,
   BreakStatement,
   Call,
   DictionaryExpression,
@@ -17,14 +16,11 @@ const {
   KeyValPair,
   LargeBlock,
   Null,
-  NullType,
   NumericLiteral,
-  NumType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
-  StringType,
   SubscriptedExpression,
   TernaryStatement,
   TinyBlock,
@@ -33,7 +29,12 @@ const {
   Variable,
   WhileStatement,
 } = require("../ast");
-console.log(NumType);
+const {
+  NullType,
+  NumType,
+  StringType,
+  BooleanType,
+} = require("../semantics/builtins");
 const check = require("./check");
 const Context = require("./context");
 
@@ -67,6 +68,8 @@ AssignmentStatement.prototype.analyze = function(context) {
 BinaryExpression.prototype.analyze = function(context) {
   this.left.analyze(context);
   this.right.analyze(context);
+  //console.log("[LEFT]", this.left);
+  //console.log("[RIGHT]", this.right);
 
   if (/[-+*/%]/.test(this.op)) {
     check.isNumber(this.left);
@@ -98,15 +101,15 @@ Call.prototype.analyze = function(context) {
   this.callee.analyze(context);
   this.args.forEach((a) => a.analyze(context));
   this.type = this.callee.type;
-  // console.log(
-  //   "[CALLEE OBJECT]: ",
-  //   this.callee,
-  //   "[VALUE]: ",
-  //   this.callee.value,
-  //   "[PARAMS]: ",
-  //   this.callee.value.function.params[0]
-  // );
-  // console.log("[ARGS]: ", this.args[0].expression);
+  console.log(
+    "[CALLEE OBJECT]: ",
+    this.callee,
+    "[VALUE]: ",
+    this.callee.value,
+    "[PARAMS]: ",
+    this.callee.value.function.params[0]
+  );
+  console.log("[ARGS]: ", this.args[0].expression);
 
   context.isFunction(this.callee.value);
   this.args.forEach((a, i) => {
@@ -144,6 +147,43 @@ ForStatement.prototype.analyze = function(context) {
 Func.prototype.analyze = function(context) {
   context.add(this.function);
   this.function.analyze(context.createChildContextForFunctionBody(this));
+};
+
+FunctionObject.analyze = function(context) {
+  this.params = this.params.map((p) => {
+    new Parameter(p.type, p.id);
+  });
+  this.params.forEach((p) => p.analyze(context));
+  if (this.body.type === LargeBlock) {
+    this.body.forEach((sm) => sm.analyze(context));
+    const rs = this.body.filter((b) => b.constructor === ReturnStatement);
+    if (rs.length === 0 && this.type !== "void") {
+      throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
+    } else if (returnStatement.length > 0) {
+      if (this.type === "void") {
+        throw new Error(
+          "Void functions cannot have retuwn statements (」°ロ°)」"
+        );
+      }
+      rs.forEach((sm) => check.isAssignableTo(sm.returnValue.type, this.type));
+    }
+  } else {
+    this.body.analyze(context);
+    if (
+      this.body.simpleStmt.constructor === ReturnStatement &&
+      this.type === "void"
+    ) {
+      throw new Error(
+        "Void functions cannot have retuwn statements (」°ロ°)」"
+      );
+    } else if (
+      this.body.simpleStmt.constructor !== ReturnStatement &&
+      this.type !== "void"
+    ) {
+      throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
+    }
+    check.isAssignableTo(this.body.simpleStmt.returnValue, this.type);
+  }
 };
 
 IfStatement.prototype.analyze = function(context) {
@@ -233,14 +273,8 @@ UnaryExpression.prototype.analyze = function(context) {
 };
 
 VariableDeclaration.prototype.analyze = function(context) {
-  // console.log(
-  //   "[VD CONTEXT INITIALIZER]: ",
-  //   this.initializer,
-  //   "[VD CONTEXT TYPE]: ",
-  //   this.type
-  // );
   this.initializer.analyze(context);
-  console.log("[INITIALIZER TYPE]:", this.initializer, "[TYPE]", this.type);
+  //console.log("[INITIALIZER TYPE]:", this.initializer, "[TYPE]", this.type);
   check.isAssignableTo(this.initializer, this.type);
   context.add(this);
 };

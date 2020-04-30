@@ -16,7 +16,6 @@ const {
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
-  BooleanType,
   BreakStatement,
   Call,
   DictionaryExpression,
@@ -27,20 +26,24 @@ const {
   KeyValPair,
   LargeBlock,
   NumericLiteral,
-  NumType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
-  StringType,
   SubscriptedExpression,
   TinyBlock,
   TernaryStatement,
   UnaryExpression,
   VariableDeclaration,
   Variable,
-  WhileStatement
+  WhileStatement,
 } = require("..");
+
+const {
+  NumType,
+  BooleanType,
+  StringType,
+} = require("../../semantics/builtins");
 
 const fixture = {
   //tests function declaration and calls
@@ -56,8 +59,8 @@ const fixture = {
         [new Parameter(NumType, "num", new NumericLiteral(5))],
         new TinyBlock([new ReturnStatement([new NumericLiteral(5)])])
       ),
-      new Call(new Variable("avg"), [new Argument([], new NumericLiteral(7))])
-    ])
+      new Call(new Variable("avg"), [new Argument([], new NumericLiteral(7))]),
+    ]),
   ],
 
   //tests var declarations and string related stuff
@@ -80,9 +83,9 @@ const fixture = {
         new Argument(
           [],
           new SubscriptedExpression(new Variable("arr"), new NumericLiteral(1))
-        )
-      ])
-    ])
+        ),
+      ]),
+    ]),
   ],
 
   //majority of the coverage here
@@ -125,7 +128,7 @@ const fixture = {
               new NumericLiteral(2),
               new NumericLiteral(3)
             )
-          )
+          ),
         ])
       ),
       new VariableDeclaration(
@@ -160,8 +163,8 @@ const fixture = {
         new Variable("test"),
         new Variable("yay"),
         new Variable("boo")
-      )
-    ])
+      ),
+    ]),
   ],
 
   //edge-case for empty lists
@@ -169,7 +172,7 @@ const fixture = {
   emptyList: [
     String.raw`print()
   `,
-    new Program([new Call(new Variable("print"), [])])
+    new Program([new Call(new Variable("print"), [])]),
   ],
 
   //dictionary declaration and type literals
@@ -189,22 +192,22 @@ const fixture = {
           new KeyValPair(
             new StringLiteral('"oof"'),
             new StringLiteral('"oofoof"')
-          )
+          ),
         ])
-      )
-    ])
-  ]
+      ),
+    ]),
+  ],
 };
 
 describe("The parser", () => {
   Object.entries(fixture).forEach(([name, [source, expected]]) => {
-    test(`produces the correct AST for ${name}`, done => {
+    test(`produces the correct AST for ${name}`, (done) => {
       expect(parse(source)).toEqual(expected);
       done();
     });
   });
 
-  test("throws an exception on a syntax error", done => {
+  test("throws an exception on a syntax error", (done) => {
     // We only need one test here that an exception is thrown.
     // Specific syntax errors are tested in the grammar test.
     expect(() => parse("as$df^&%*$&")).toThrow();

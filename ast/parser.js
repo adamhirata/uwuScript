@@ -13,7 +13,6 @@ const {
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
-  BooleanType,
   BreakStatement,
   Call,
   DictionaryExpression,
@@ -25,12 +24,10 @@ const {
   LargeBlock,
   NumericLiteral,
   Null,
-  NumType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
-  StringType,
   SubscriptedExpression,
   TernaryStatement,
   TinyBlock,
@@ -39,6 +36,7 @@ const {
   Variable,
   WhileStatement,
 } = require(".");
+const { NumType, StringType, BooleanType } = require("../semantics/builtins");
 
 const grammar = ohm.grammar(fs.readFileSync("./syntax/uwuScript.ohm"));
 

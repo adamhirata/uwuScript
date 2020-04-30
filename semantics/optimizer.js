@@ -5,7 +5,6 @@ const {
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
-  BooleanType,
   BreakStatement,
   Call,
   DictionaryExpression,
@@ -16,12 +15,10 @@ const {
   KeyValPair,
   LargeBlock,
   NumericLiteral,
-  NumType,
   Parameter,
   Program,
   ReturnStatement,
   StringLiteral,
-  StringType,
   SubscriptedExpression,
   TernaryStatement,
   TinyBlock,
@@ -47,7 +44,7 @@ function bothBooleanLiterals(e) {
   return e.left instanceof BooleanLiteral && e.right instanceof BooleanLiteral;
 }
 
-BinaryExpression.prototype.optimize = function () {
+BinaryExpression.prototype.optimize = function() {
   this.left = this.left.optimize();
   this.right = this.right.optimize();
 
@@ -87,11 +84,11 @@ BinaryExpression.prototype.optimize = function () {
   return this;
 };
 
-BreakStatement.prototype.optimize = function () {
+BreakStatement.prototype.optimize = function() {
   return this;
 };
 
-ForStatement.prototype.optimize = function () {
+ForStatement.prototype.optimize = function() {
   this.test1 = this.test1.optimize;
   this.test2 = this.test2.optimize;
   this.block = this.block.optimize;
@@ -99,6 +96,6 @@ ForStatement.prototype.optimize = function () {
   return this;
 };
 
-ReturnStatement.prototype.optimize = function () {
+ReturnStatement.prototype.optimize = function() {
   this.returnValue = this.returnValue.optimize();
 };
