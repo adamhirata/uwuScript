@@ -10,17 +10,17 @@ const analyze = require("../../semantics/analyzer");
 const generate = require("../javascript-generator");
 
 const fixture = {
-  // hello: [
-  //   String.raw`pwint("Hello world")
-  //     `,
-  //   String.raw`console.log("Hello world");`,
-  // ],
-  len: [
-    String.raw`Stwing s = "corgis"
-  Numbwer s_len = length(s)
-  `,
-    /let s_(\d+) = "corgis";\s*let s_len_\d+ = s_\1.length;/,
+  hello: [
+    String.raw`pwint("Hello world")
+      `,
+    String.raw`console.log("Hello world");`,
   ],
+  // len: [
+  //   String.raw`Stwing s = "corgis"
+  // Numbwer s_len = length(s)
+  // `,
+  //   /let s_(\d+) = "corgis";\s*let s_len_\d+ = s_\1.length;/,
+  // ],
 };
 
 describe("The JavaScript generator", () => {
