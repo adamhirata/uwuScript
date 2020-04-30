@@ -33,6 +33,7 @@ const {
   Variable,
   WhileStatement,
 } = require("../ast");
+console.log(NumType);
 const check = require("./check");
 const Context = require("./context");
 
@@ -60,7 +61,7 @@ ArrayExpression.prototype.analyze = function(context) {
 AssignmentStatement.prototype.analyze = function(context) {
   this.sources.analyze(context);
   this.targets.analyze(context);
-  check.isAssignableTo(this.source, this.target.type);
+  check.isAssignableTo(this.sources, this.targets.type);
 };
 
 BinaryExpression.prototype.analyze = function(context) {

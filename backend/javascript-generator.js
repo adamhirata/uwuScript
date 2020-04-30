@@ -14,7 +14,6 @@
  */
 
 const beautify = require("js-beautify");
-const prettyJs = require("pretty-js");
 
 const {
   Argument,
@@ -95,6 +94,14 @@ module.exports = function(exp) {
 
 Argument.prototype.gen = function() {
   return this.expression.gen();
+};
+
+Argument.prototype.gen = function() {
+  if (this.id) {
+    return `${this.id.gen()} = ${this.expression.gen()}`;
+  } else {
+    return `${this.expression.gen()}`;
+  }
 };
 
 ArrayExpression.prototype.gen = function() {
