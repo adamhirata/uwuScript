@@ -5,9 +5,9 @@ const {
   BooleanType,
   ArrayType,
   DictionaryType,
-  //Func,
-  //FunctionObject,
-} = require("../Ast");
+  Func,
+  FunctionObject,
+} = require("../ast");
 //const util = require("util");
 
 function doCheck(condition, message) {
@@ -24,14 +24,7 @@ function isArray(exp) {
 }
 
 function isAssignableTo(exp, type) {
-  console.log(
-    "[EXP]: ",
-    JSON.stringify(exp.type),
-    "[TYPE]",
-    JSON.stringify(type),
-    "Are they equal?",
-    JSON.stringify(exp.type) === JSON.stringify(type)
-  );
+  console.log(exp);
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(type),
     `Types are not compatible`
@@ -61,6 +54,7 @@ function isFunction(entity) {
 }
 
 function isNumber(exp) {
+  console.log(NumType);
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(NumType),
     "Not a Numbwer ಥ_ಥ"
