@@ -5,6 +5,8 @@
 ## Introduction (づ｡◕‿‿◕｡)づ
 uwuScript is a cute scripting language that is designed to be fun (and possibly cringey) to use. Because of the use of adorable emoticons and keywords, you will not only feel cuter, but look cuter by the end of developing your program!❀ This language compiles to Javascript and pulls inspiration from other sugoi すごい languages such as Java's static typing and Swift's for-in loops. uwuScipt also allowed for the programmer to use comments to effectively convey their emotions through various comment emoticons.
 
+uwuScript Website: https://adamhirata.github.io/uwuScript/
+
 ## Features
 * Cuteness
 * Scripting Language
