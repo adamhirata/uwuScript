@@ -33,18 +33,19 @@ const {
   Variable,
   WhileStatement,
 } = require("../ast");
+console.log(NumType);
 const check = require("./check");
 const Context = require("./context");
 
-module.exports = function(exp) {
+module.exports = function (exp) {
   exp.analyze(Context.INITIAL);
 };
 
-Argument.prototype.analyze = function(context) {
+Argument.prototype.analyze = function (context) {
   this.expression.analyze(context);
 };
 
-ArrayExpression.prototype.analyze = function(context) {
+ArrayExpression.prototype.analyze = function (context) {
   this.members.forEach((m) => {
     m.analyze(context);
   });
@@ -56,13 +57,13 @@ ArrayExpression.prototype.analyze = function(context) {
   }
 };
 
-AssignmentStatement.prototype.analyze = function(context) {
+AssignmentStatement.prototype.analyze = function (context) {
   this.sources.analyze(context);
   this.targets.analyze(context);
-  check.isAssignableTo(this.source, this.target.type);
+  check.isAssignableTo(this.sources, this.targets.type);
 };
 
-BinaryExpression.prototype.analyze = function(context) {
+BinaryExpression.prototype.analyze = function (context) {
   this.left.analyze(context);
   this.right.analyze(context);
 
@@ -84,15 +85,15 @@ BinaryExpression.prototype.analyze = function(context) {
   }
 };
 
-BooleanLiteral.prototype.analyze = function(context) {
+BooleanLiteral.prototype.analyze = function (context) {
   this.type = BooleanType;
 };
 
-BreakStatement.prototype.analyze = function(context) {
+BreakStatement.prototype.analyze = function (context) {
   if (!context.inLoop) throw Error("Break statement used out of loop ლ(ﾟдﾟლ)");
 };
 
-Call.prototype.analyze = function(context) {
+Call.prototype.analyze = function (context) {
   this.callee.analyze(context);
   this.args.forEach((a) => a.analyze(context));
   this.type = this.callee.type;
@@ -115,7 +116,7 @@ Call.prototype.analyze = function(context) {
   });
 };
 
-DictionaryExpression.prototype.analyze = function(context) {
+DictionaryExpression.prototype.analyze = function (context) {
   this.members.forEach((m) => {
     m.exp1.analyze(context);
     m.exp2.analyze(context);
@@ -132,19 +133,19 @@ DictionaryExpression.prototype.analyze = function(context) {
   }
 };
 
-ForStatement.prototype.analyze = function(context) {
+ForStatement.prototype.analyze = function (context) {
   this.test1.analyze(context);
   this.test2.analyze(context);
   const bodyContext = context.createChildContextForLoop();
   this.body.forEach((n) => n.analyze(bodyContext));
 };
 
-Func.prototype.analyze = function(context) {
+Func.prototype.analyze = function (context) {
   context.add(this.function);
   this.function.analyze(context.createChildContextForFunctionBody(this));
 };
 
-IfStatement.prototype.analyze = function(context) {
+IfStatement.prototype.analyze = function (context) {
   this.tests.forEach((test) => {
     test.analyze(context);
     check.isBoolean(test);
@@ -161,28 +162,28 @@ IfStatement.prototype.analyze = function(context) {
   }
 };
 
-KeyValPair.prototype.analyze = function(context) {
+KeyValPair.prototype.analyze = function (context) {
   this.exp1.analyze(context);
   this.exp2.analyze(context);
 };
 
-LargeBlock.prototype.analyze = function(context) {
+LargeBlock.prototype.analyze = function (context) {
   this.statements.forEach((sm) => sm.analyze(context));
 };
 
-Null.prototype.analyze = function(context) {
+Null.prototype.analyze = function (context) {
   this.type = NullType;
 };
 
-NumericLiteral.prototype.analyze = function(context) {
+NumericLiteral.prototype.analyze = function (context) {
   this.type = NumType;
 };
 
-Program.prototype.analyze = function(context) {
+Program.prototype.analyze = function (context) {
   this.statements.forEach((sm) => sm.analyze(context));
 };
 
-ReturnStatement.prototype.analyze = function(context) {
+ReturnStatement.prototype.analyze = function (context) {
   if (this.returnValue) {
     this.returnValue.forEach((v) => {
       v.analyze(context);
@@ -190,11 +191,11 @@ ReturnStatement.prototype.analyze = function(context) {
   }
 };
 
-StringLiteral.prototype.analyze = function(context) {
+StringLiteral.prototype.analyze = function (context) {
   this.type = StringType;
 };
 
-SubscriptedExpression.prototype.analyze = function(context) {
+SubscriptedExpression.prototype.analyze = function (context) {
   this.variable.analyze(context);
   this.subscript.analyze(context);
   if (variable.type === ArrayType) {
@@ -206,7 +207,7 @@ SubscriptedExpression.prototype.analyze = function(context) {
   }
 };
 
-TernaryStatement.prototype.analyze = function(context) {
+TernaryStatement.prototype.analyze = function (context) {
   this.test.analyze(context);
   check.isBoolean(this.test);
   this.success.analyze(context);
@@ -215,11 +216,11 @@ TernaryStatement.prototype.analyze = function(context) {
   this.type = this.success.type;
 };
 
-TinyBlock.prototype.analyze = function(context) {
+TinyBlock.prototype.analyze = function (context) {
   this.simpleStmt.analyze(context);
 };
 
-UnaryExpression.prototype.analyze = function(context) {
+UnaryExpression.prototype.analyze = function (context) {
   this.operand.analyze(context);
   if (this.op == "-") {
     check.isNumber(this.operand);
@@ -230,24 +231,24 @@ UnaryExpression.prototype.analyze = function(context) {
   }
 };
 
-VariableDeclaration.prototype.analyze = function(context) {
+VariableDeclaration.prototype.analyze = function (context) {
   this.initializer.analyze(context);
   check.isAssignableTo(this.initializer, this.type);
   context.add(this);
 };
 
-Variable.prototype.analyze = function(context) {
+Variable.prototype.analyze = function (context) {
   this.value = context.lookupValue(this.id);
   this.type = this.value.type;
 };
 
-WhileStatement.prototype.analyze = function(context) {
+WhileStatement.prototype.analyze = function (context) {
   this.test.analyze(context);
   const bodyContext = context.createChildContextForLoop();
   this.body.forEach((n) => n.analyze(bodyContext));
 };
 
-IfStatement.prototype.analyze = function(context) {
+IfStatement.prototype.analyze = function (context) {
   this.tests.forEach((test) => {
     test.analyze(context);
     check.isBoolean(test);
@@ -264,18 +265,18 @@ IfStatement.prototype.analyze = function(context) {
   }
 };
 
-NumericLiteral.prototype.analyze = function(context) {
+NumericLiteral.prototype.analyze = function (context) {
   this.type = NumType;
 };
 
-StringLiteral.prototype.analyze = function(context) {
+StringLiteral.prototype.analyze = function (context) {
   this.type = StringType;
 };
 
-Parameter.prototype.analyze = function(context) {
+Parameter.prototype.analyze = function (context) {
   context.add(this);
 };
 
-Program.prototype.analyze = function(context) {
+Program.prototype.analyze = function (context) {
   this.statements.forEach((sm) => sm.analyze(context));
 };
