@@ -5,7 +5,7 @@ const StringType = new PrimitiveType("Stwing");
 const BooleanType = new PrimitiveType("Boowean");
 
 const StandardFunctions = [
-  new Func("void", "pwint", [new Parameter(StringType, "s")]),
+  new Func("void", "pwint", [new Parameter("void", "s")]),
   new Func(NumType, "length", [new Parameter(StringType, "s")]),
   new Func(StringType, "substwing", [
     new Parameter(StringType, "s"),
