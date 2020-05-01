@@ -100,12 +100,9 @@ Argument.prototype.gen = function() {
   return this.expression.gen();
 };
 
-Argument.prototype.gen = function() {
-  return this.expression.gen();
-};
-
 ArrayExpression.prototype.gen = function() {
-  return `Array(${this.size.gen()}).fill(${this.fill.gen()})`;
+  const members = this.members.map((m) => m.gen());
+  return `[${members}]`;
 };
 
 AssignmentStatement.prototype.gen = function() {
@@ -126,9 +123,7 @@ BreakStatement.prototype.gen = function() {
 
 Call.prototype.gen = function() {
   const args = this.args.map((a) => a.gen());
-  //console.log("[CALL CALLEE]", this.callee);
   if (this.callee.value.builtin) {
-    console.log("true");
     return builtin[this.callee.id](args);
   }
   return `${this.callee.gen()}(${args.join(",")})`;
@@ -145,23 +140,23 @@ DictionaryExpression.prototype.gen = function() {
 
 ForStatement.prototype.gen = function() {
   const tester = javaScriptId(this.tester);
-  console.log("TEST 1", this.test1);
   const test1 = this.test1.gen();
   const test2 = this.test2.gen();
-  console.log("[TEST1]: ", test1, "\n[TEST2]: ", test2);
-  console.log("BLOCK", this.block);
-  const block = this.block.statements;
-  return `for (let ${tester} = ${test1}; ${tester} <= ${test1}; ${tester} += ${test2}) {${block.join(
+  const block = this.block.statements.map((s) => s.gen());
+  return `for (let ${tester} = ${test1}; ${tester} <= ${test2}; ${tester} += 1) {${block.join(
     ";\n"
   )};}`;
 };
 
 Func.prototype.gen = function() {
-  const name = javaScriptId(this);
-  const params = this.parameters
-    ? this.parameters.map((p) => javaScriptId(p))
+  const name = javaScriptId(this.id);
+  const params = this.function.params
+    ? this.function.params.map((p) => javaScriptId(p.id))
     : [""];
-  return `function ${name} (${params.join(",")}) {${this.body.gen()}}`;
+
+  return `function ${name} (${params.join(
+    ","
+  )}) {${this.function.body.statements.map((s) => s.gen())}}`;
 };
 
 IfStatement.prototype.gen = function() {
@@ -181,9 +176,20 @@ NumericLiteral.prototype.gen = function() {
   return `${this.value}`;
 };
 
+ReturnStatement.prototype.gen = function() {
+  return `return ${this.returnValue[0].gen()};`;
+};
+
 StringLiteral.prototype.gen = function() {
   //console.log("STRING LIT GEN", this.value);
   return `${this.value}`;
+};
+
+TernaryStatement.prototype.gen = function() {
+  const test = this.test.gen();
+  const success = this.success.gen();
+  const fail = this.fail.gen();
+  return `${test} ? ${success} : ${fail}`;
 };
 
 UnaryExpression.prototype.gen = function() {
