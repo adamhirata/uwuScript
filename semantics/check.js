@@ -22,7 +22,6 @@ function isArray(exp) {
 }
 
 function isAssignableTo(exp, type) {
-  console.log("EXP", exp.type, "TYPE", type);
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(type),
     `Types are not compatible`

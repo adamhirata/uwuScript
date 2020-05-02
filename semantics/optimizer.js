@@ -81,6 +81,9 @@ BinaryExpression.prototype.optimize = function() {
 
   if (bothBooleanLiterals(this)) {
     const [lval, rval] = [this.left.value, this.right.value];
+    if (this.op === "&&" && (lval === false || rval === false)) {
+      return new BooleanLiteral(false);
+    }
     if (this.op === "&&") return new BooleanLiteral(lval && rval);
     if (this.op === "||") return new StringLiteral(lval || rval);
   }
@@ -90,12 +93,16 @@ BinaryExpression.prototype.optimize = function() {
     if (this.op === "+") return new NumericLiteral(lval + rval);
     if (this.op === "-") return new NumericLiteral(lval - rval);
     if (this.op === "*") return new NumericLiteral(lval * rval);
+    if (this.op === "/" && rval === 1) return new NumericLiteral(lval);
+    if (this.op === "/" && rval === lval) return new NumericLiteral(1);
     if (this.op === "/") return new NumericLiteral(lval / rval);
     if (this.op === "%") return new NumericLiteral(lval % rval);
 
     if (this.op === "<=") return new BooleanLiteral(lval <= rval);
+    if (this.op === "<" && lval === rval) return new BooleanLiteral(false);
     if (this.op === "<") return new BooleanLiteral(lval < rval);
     if (this.op === ">=") return new BooleanLiteral(lval >= rval);
+    if (this.op === ">" && lval === rval) return new BooleanLiteral(false);
     if (this.op === ">") return new BooleanLiteral(lval > rval);
   }
 
@@ -203,7 +210,7 @@ VariableDeclaration.prototype.optimize = function() {
   return this;
 };
 
-Variable.prototype.ReturnStatement.optimize = function() {
+Variable.prototype.optimize = function() {
   return this;
 };
 

@@ -43,7 +43,6 @@ module.exports = function(exp) {
 };
 
 Argument.prototype.analyze = function(context) {
-  //console.log("[ARGUMENT EXP]: ", this.expression);
   this.expression.analyze(context);
 };
 
@@ -102,8 +101,6 @@ Call.prototype.analyze = function(context) {
   this.type = this.callee.value.function.type;
 
   context.isFunction(this.callee.value);
-  console.log("CALL ARGS", this.args);
-  console.log("CALL PARAM", this.callee.value.function.params);
   this.args.forEach((a, i) => {
     const paramType = this.callee.value.function.params[i].type;
     if (paramType !== "void") {
@@ -243,16 +240,10 @@ SubscriptedExpression.prototype.analyze = function(context) {
 };
 
 TernaryStatement.prototype.analyze = function(context) {
-  console.log("[TERNARY INSTANCE]", this);
-
   this.test.analyze(context);
   check.isBoolean(this.test);
   this.success.analyze(context);
-  console.log("[TERNARY SUCCESS]", this.success);
-
   this.fail.analyze(context);
-  console.log("[TERNARY FAIL]", this.fail);
-
   check.sameType(this.success.type, this.fail.type);
   this.type = this.success.type;
 };
@@ -274,15 +265,12 @@ UnaryExpression.prototype.analyze = function(context) {
 
 VariableDeclaration.prototype.analyze = function(context) {
   this.initializer.analyze(context);
-  //console.log("[VARDEC]: ", this);
   check.isAssignableTo(this.initializer, this.type);
   context.add(this);
 };
 
 Variable.prototype.analyze = function(context) {
-  // console.log("[VARIABLE AST]: ", this, "\n[CONTEXT]: ", context);
   this.value = context.lookupValue(this.id);
-  //console.log("[VARIABLE LOOKUP]: ", this.value);
   this.type = this.value.type;
 };
 

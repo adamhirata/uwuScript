@@ -74,7 +74,6 @@ function generateBlock(block) {
   return block.map((s) => `${s.gen()};`).join("");
 }
 module.exports = function(exp) {
-  //console.log("EXP STATEMENT", exp.statements);
   return prettyJs(generateBlock(exp.statements), { indent: "  " });
 };
 
@@ -167,7 +166,6 @@ ReturnStatement.prototype.gen = function() {
 };
 
 StringLiteral.prototype.gen = function() {
-  //console.log("STRING LIT GEN", this.value);
   return `${this.value}`;
 };
 
