@@ -88,10 +88,42 @@ BreakStatement.prototype.optimize = function() {
   return this;
 };
 
+DictionaryType.prototype.optimize = function() {
+  return this;
+};
+
+Func.prototype.optimize = function() {
+  this.function = this.function.optmize();
+  return this;
+};
+
+IfStatement.prototype.optimize = function() {
+  this.cases.forEach(test, (i) => {
+    this.cases[i] = this.cases[i].optimize();
+  });
+  for (let i = 0; i < this.consequents.length; i++) {
+    for (let j = 0; i < this.consequents[i].length; i++) {
+      this.consequents[i][j] = this.consequents[i][j].optimize();
+    }
+  }
+};
+
+KeyValPair.prototype.optimize = function() {
+  return this;
+};
+
+LargeBlock.prototype.optimize = function() {
+  return this;
+};
+
+Parameter.prototype.optimize = function() {
+  return this;
+};
+
 ForStatement.prototype.optimize = function() {
-  this.test1 = this.test1.optimize;
-  this.test2 = this.test2.optimize;
-  this.block = this.block.optimize;
+  this.test1 = this.test1.optimize();
+  this.test2 = this.test2.optimize();
+  this.block = this.block.optimize();
   this.tester = this.tester.map((e) => e.optimize());
   return this;
 };
