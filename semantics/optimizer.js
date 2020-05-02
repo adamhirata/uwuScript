@@ -44,6 +44,24 @@ function bothBooleanLiterals(e) {
   return e.left instanceof BooleanLiteral && e.right instanceof BooleanLiteral;
 }
 
+Argument.prototype.optimize = function() {
+  return this;
+};
+
+ArrayExpression.prototype.optimize = function() {
+  this.members.forEach((m) => m.optimize());
+};
+
+ArrayType.prototype.optimize = function() {
+  return this;
+};
+
+AssignmentStatement.prototype.optimize = function() {
+  this.targets.optimize();
+  this.sources.optimize();
+  return this;
+};
+
 BinaryExpression.prototype.optimize = function() {
   this.left = this.left.optimize();
   this.right = this.right.optimize();
@@ -84,6 +102,10 @@ BinaryExpression.prototype.optimize = function() {
   return this;
 };
 
+BooleanLiteral.prototype.optimize = function() {
+  return this;
+};
+
 BreakStatement.prototype.optimize = function() {
   return this;
 };
@@ -113,6 +135,14 @@ KeyValPair.prototype.optimize = function() {
 };
 
 LargeBlock.prototype.optimize = function() {
+  return this;
+};
+
+Call.prototype.optimize = function() {
+  this.args.forEach((m) => m.expression.optimize());
+};
+
+DictionaryExpression.prototype.optimize = function() {
   return this;
 };
 
