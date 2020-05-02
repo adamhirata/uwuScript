@@ -96,6 +96,59 @@ ForStatement.prototype.optimize = function() {
   return this;
 };
 
+Program.prototype.optimize = function() {
+  for (let i = 0; i < this.statements.length; i += 1) {
+    this.statements[i] = this.statements[i].optimize();
+  }
+  this.statements.filter((s) => s !== null);
+  return this;
+};
+
 ReturnStatement.prototype.optimize = function() {
   this.returnValue = this.returnValue.optimize();
+  return this;
+};
+
+SubscriptedExpression.prototype.optimize = function() {
+  this.subscript = this.subscript.optimize();
+  return this;
+};
+
+TernaryStatement.prototype.optimize = function() {
+  this.test = this.test.optimize();
+  this.success = this.success.optimize();
+  this.fail = this.fail.optimize();
+  return this;
+};
+
+TinyBlock.prototype.optimize = function() {
+  this.simpleStmt = this.simpleStmt.optimize;
+};
+
+UnaryExpression.prototype.optimize = function() {
+  this.operand = this.operand.optimize();
+  if (this.op === "!" && this.operand instanceof BooleanLiteral) {
+    return new BooleanLiteral(!this.operand.value);
+  }
+  if (this.op === "-" && this.operand instanceof NumericLiteral) {
+    return new NumericLiteral(-this.operand.value);
+  }
+  return this;
+};
+
+VariableDeclaration.prototype.optimize = function() {
+  this.exp = this.exp.optimize();
+  return this;
+};
+
+Variable.prototype.ReturnStatement.optimize = function() {
+  return this;
+};
+
+WhileStatement.prototype.optimize = function() {
+  this.test = this.test.optimize();
+  this.body.forEach((i) => {
+    this.body[i] = this.body[i].optimize();
+  });
+  return this;
 };
