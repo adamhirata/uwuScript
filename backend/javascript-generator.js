@@ -28,6 +28,7 @@ const {
   ForStatement,
   Func,
   IfStatement,
+  KeyValPair,
   NumericLiteral,
   ReturnStatement,
   StringLiteral,
