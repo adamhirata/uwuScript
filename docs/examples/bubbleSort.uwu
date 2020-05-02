@@ -1,0 +1,14 @@
+Aww<Numbwer> bubbleSort(Aww<Numbwer> arrInput) uwu 
+  Aww<Numbwer> arr = arrInput
+  Numbwer len = length(arr)
+  fow i in 0...len uwu 
+    fow j in 0...len uwu
+      if (arr[j] > arr[j+1]) uwu
+        Numbwer temp = arr[j]
+        arr[j] = arr[j+1]
+        arr[j+1] = temp
+      owo
+    owo
+  owo
+  retuwn arr
+owo
