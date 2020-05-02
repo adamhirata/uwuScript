@@ -41,12 +41,12 @@ const fixture = {
       (9 / 3) + ((2 * 6) % 4) - 1
     `,
     String.raw`(21 <= 23);
-  (4 !== 20);
-  (true && true);
-  (true !== false);
-  (true === (!false));
-  (1000 + 98);
-  (((9 / 3) + ((2 * 6) % 4)) - 1);`,
+(4 !== 20);
+(true && true);
+(true !== false);
+(true === (!false));
+(1000 + 98);
+(((9 / 3) + ((2 * 6) % 4)) - 1);`,
   ],
   ifStatement: [
     String.raw`if (1 < 2) uwu 1 owo
