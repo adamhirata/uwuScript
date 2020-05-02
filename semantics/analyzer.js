@@ -233,10 +233,10 @@ StringLiteral.prototype.analyze = function(context) {
 SubscriptedExpression.prototype.analyze = function(context) {
   this.variable.analyze(context);
   this.subscript.analyze(context);
-  if (variable.type === ArrayType) {
+  if (this.variable.type === ArrayType) {
     check.isNumber(this.subscript);
     this.type = this.variable.type.type;
-  } else if (variable.type === DictionaryType) {
+  } else if (this.variable.type === DictionaryType) {
     check.sameType(this.id.type.type1, this.subscript.type);
     this.type = this.id.type.type2;
   }

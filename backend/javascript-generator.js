@@ -131,8 +131,8 @@ Call.prototype.gen = function() {
 
 DictionaryExpression.prototype.gen = function() {
   const formattedKeyValues = [];
-  const keyValues = this.exp.map((kv) => kv.gen());
-  for (let i = 0; i < this.exp.length; i += 1) {
+  const keyValues = this.members.map((kv) => kv.gen());
+  for (let i = 0; i < this.members.length; i += 1) {
     formattedKeyValues.push(keyValues[i]);
   }
   return `{ ${formattedKeyValues.join(", ")} }`;
@@ -170,6 +170,10 @@ IfStatement.prototype.gen = function() {
     ? `}else{${generateBlock(this.alternate.simpleStmt)}`
     : "";
   return `${cases.join("")}${alternate}}`;
+};
+
+KeyValPair.prototype.gen = function() {
+  return `${this.exp1.value}: ${this.exp2.value}`;
 };
 
 NumericLiteral.prototype.gen = function() {

@@ -92,6 +92,21 @@ const fixture = {
     String.raw`2 < 3 ? pwint(2) ewse pwint(3)`,
     String.raw`(2 < 3) ? console.log(2) : console.log(3);`,
   ],
+
+  call: [
+    String.raw`Numbwer f (Numbwer x, Stwing y) uwu
+      retuwn x
+    owo
+    f(1, "")
+    `,
+    /function f_(\d+)\(x_(\d+), y_\d+\) \{\s*return x_\2;\s*\};\s*f_\1\(1, ""\);/,
+  ],
+
+  dictionary: [
+    String.raw`Dictionawy<Stwing to Stwing> d = {"forney" to "hustler", "toal" to "wizard"}
+    `,
+    /let d_\d+ = \{\s*forney: "hustler",\s*toal: "wizard"\s*\};/,
+  ],
 };
 
 describe("The JavaScript generator", () => {
