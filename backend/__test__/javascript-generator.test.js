@@ -34,20 +34,20 @@ const fixture = {
   ],
   binary: [
     String.raw`21 <= 23
-          4 != 20
-          twue && twue
-          twue != fawse
-          twue == !fawse
-          1000 + 98
-          (9 / 3) + ((2 * 6) % 4) - 1
-        `,
+    4 != 20
+    twue && twue
+    twue != fawse
+    twue == !fawse
+    1000 + 98
+    (9 / 3) + ((2 * 6) % 4) - 1
+    `,
     String.raw`(21 <= 23);
-  (4 !== 20);
-  (true && true);
-  (true !== false);
-  (true === (!false));
-  (1000 + 98);
-  (((9 / 3) + ((2 * 6) % 4)) - 1);`,
+(4 !== 20);
+(true && true);
+(true !== false);
+(true === (!false));
+(1000 + 98);
+(((9 / 3) + ((2 * 6) % 4)) - 1);`,
   ],
   ifStatement: [
     String.raw`if (1 < 2) uwu 1 owo
@@ -71,10 +71,10 @@ const fixture = {
   ],
   forLoop: [
     String.raw`fow i in 0...10 uwu
-            pwint("Hi Toal :)")
+            pwint("UwU :)")
           owo
           `,
-    /for \(let i_(\d+) = 0; i_\1 <= 10; i_\1 \+= 1\) \{\s*console.log\("Hi Toal :\)"\);\s*\};/,
+    /for \(let i_(\d+) = 0; i_\1 <= 10; i_\1 \+= 1\) \{\s*console.log\("UwU :\)"\);\s*\};/,
   ],
   array: [
     String.raw`Awway<Numbwer> nums = [1,2,3,4]
@@ -102,14 +102,14 @@ const fixture = {
     String.raw`(2 < 3) ? console.log(2) : console.log(3);`,
   ],
 
-  // call: [
-  //   String.raw`Numbwer f (Numbwer x, Stwing y) uwu
-  //     retuwn x
-  //   owo
-  //   f(1, "")
-  //   `,
-  //   /function f_(\d+)\(x_(\d+), y_\d+\) \{\s*return x_\2;\s*\};\s*f_\1\(1, ""\);/,
-  // ],
+  call: [
+    String.raw`Numbwer f (Numbwer x, Stwing y) uwu
+      retuwn x
+    owo
+    f(1, "")
+    `,
+    /function f_(\d+)\(x_(\d+), y_\d+\) \{\s*return x_\2;\s*\};\s*f_\1\(1, ""\);/,
+  ],
 
   dictionary: [
     String.raw`Dictionawy<Stwing to Stwing> d = {"forney" to "hustler", "toal" to "wizard"}

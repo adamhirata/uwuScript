@@ -44,8 +44,8 @@ function makeOp(op) {
   return { "==": "===", "!=": "!==" }[op] || op;
 }
 
-function makeKeyword(op) {
-  return { twue: String.raw`true`, fawse: String.raw`false` }[op] || op;
+function makeKeyword(key) {
+  return { twue: String.raw`true`, fawse: String.raw`false` }[key] || key;
 }
 
 const javaScriptId = (() => {
