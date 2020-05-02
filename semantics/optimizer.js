@@ -70,7 +70,7 @@ BinaryExpression.prototype.optimize = function() {
   if (this.op === "+" && isZero(this.left)) return this.right;
   if (this.op === "-" && isZero(this.right)) return this.left;
   if (this.op === "*" && (isZero(this.right) || isZero(this.left)))
-    return new NumericLiteral(leftType, "0");
+    return new NumericLiteral(this.leftType, "0");
   if (this.op === "*" && isOne(this.right)) return this.left;
   if (this.op === "*" && isOne(this.left)) return this.right;
 

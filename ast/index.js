@@ -188,7 +188,6 @@ module.exports = {
   IfStatement,
   KeyValPair,
   LargeBlock,
-  ArrayExpression,
   NumericLiteral,
   Null,
   PrimitiveType,
