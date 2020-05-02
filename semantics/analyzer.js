@@ -98,22 +98,20 @@ Call.prototype.analyze = function(context) {
   this.callee.analyze(context);
   this.args.forEach((a) => a.analyze(context));
 
-  this.type = this.callee.value.function.type;
+  const funcType = this.callee.value.function
+    ? this.callee.value.function
+    : this.callee.value;
+  this.type = funcType.type;
 
   console.log("[CALL THIS.TYPE]: ", this.type);
 
   context.isFunction(this.callee.value);
   this.args.forEach((a, i) => {
-    const paramType = this.callee.value.function.params[i].type;
-
+    const paramType = funcType.params[i].type;
     console.log("[CALLPARAMTYPE]: ", paramType);
     console.log("[CALL ARGS]: ", a);
-
     if (paramType !== "void") {
-      check.legalArugments(
-        this.callee.value.function.params[i],
-        a.expression.type
-      );
+      check.legalArugments(funcType.params[i], a.expression.type);
     }
   });
 };
@@ -152,9 +150,11 @@ FunctionObject.prototype.analyze = function(context) {
 
   if (this.body instanceof LargeBlock) {
     this.body.statements.forEach((sm) => sm.analyze(context));
+
     const rs = this.body.statements.filter(
       (b) => b.constructor === ReturnStatement
     );
+
     if (rs.length === 0 && this.type !== "void") {
       throw new Error("No retuwn statement found ヾ( ￣O￣)ツ");
     } else if (rs.length > 0 && this.type === "void") {
