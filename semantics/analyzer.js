@@ -100,9 +100,15 @@ Call.prototype.analyze = function(context) {
 
   this.type = this.callee.value.function.type;
 
+  console.log("[CALL THIS.TYPE]: ", this.type);
+
   context.isFunction(this.callee.value);
   this.args.forEach((a, i) => {
     const paramType = this.callee.value.function.params[i].type;
+
+    console.log("[CALLPARAMTYPE]: ", paramType);
+    console.log("[CALL ARGS]: ", a);
+
     if (paramType !== "void") {
       check.legalArugments(
         this.callee.value.function.params[i],
@@ -228,7 +234,7 @@ StringLiteral.prototype.analyze = function() {
 };
 
 SubscriptedExpression.prototype.analyze = function(context) {
-  this.variable.analyze(context);
+  console.log("[THIS.VAR]: ", this.variable);
   this.subscript.analyze(context);
   if (this.variable.type === ArrayType) {
     check.isNumber(this.subscript);
@@ -237,6 +243,7 @@ SubscriptedExpression.prototype.analyze = function(context) {
     check.sameType(this.id.type.type1, this.subscript.type);
     this.type = this.id.type.type2;
   }
+  this.variable.analyze(context);
 };
 
 TernaryStatement.prototype.analyze = function(context) {

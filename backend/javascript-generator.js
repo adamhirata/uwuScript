@@ -32,6 +32,7 @@ const {
   NumericLiteral,
   ReturnStatement,
   StringLiteral,
+  SubscriptedExpression,
   TernaryStatement,
   UnaryExpression,
   VariableDeclaration,
@@ -167,6 +168,12 @@ ReturnStatement.prototype.gen = function() {
 
 StringLiteral.prototype.gen = function() {
   return `${this.value}`;
+};
+
+SubscriptedExpression.prototype.gen = function() {
+  const base = this.variable.gen();
+  const subscript = this.subscript.gen();
+  return `${base}[${subscript}]`;
 };
 
 TernaryStatement.prototype.gen = function() {
