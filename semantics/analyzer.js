@@ -87,7 +87,7 @@ BinaryExpression.prototype.analyze = function(context) {
   }
 };
 
-BooleanLiteral.prototype.analyze = function(context) {
+BooleanLiteral.prototype.analyze = function() {
   this.type = BooleanType;
 };
 
@@ -206,11 +206,11 @@ LargeBlock.prototype.analyze = function(context) {
   this.statements.forEach((sm) => sm.analyze(context));
 };
 
-Null.prototype.analyze = function(context) {
+Null.prototype.analyze = function() {
   this.type = NullType;
 };
 
-NumericLiteral.prototype.analyze = function(context) {
+NumericLiteral.prototype.analyze = function() {
   this.type = NumType;
 };
 
@@ -226,17 +226,17 @@ ReturnStatement.prototype.analyze = function(context) {
   }
 };
 
-StringLiteral.prototype.analyze = function(context) {
+StringLiteral.prototype.analyze = function() {
   this.type = StringType;
 };
 
 SubscriptedExpression.prototype.analyze = function(context) {
   this.variable.analyze(context);
   this.subscript.analyze(context);
-  if (variable.type === ArrayType) {
+  if (this.variable.type === ArrayType) {
     check.isNumber(this.subscript);
     this.type = this.variable.type.type;
-  } else if (variable.type === DictionaryType) {
+  } else if (this.variable.type === DictionaryType) {
     check.sameType(this.id.type.type1, this.subscript.type);
     this.type = this.id.type.type2;
   }
@@ -292,11 +292,11 @@ WhileStatement.prototype.analyze = function(context) {
   this.body.simpleStmt.forEach((n) => n.analyze(bodyContext));
 };
 
-NumericLiteral.prototype.analyze = function(context) {
+NumericLiteral.prototype.analyze = function() {
   this.type = NumType;
 };
 
-StringLiteral.prototype.analyze = function(context) {
+StringLiteral.prototype.analyze = function() {
   this.type = StringType;
 };
 

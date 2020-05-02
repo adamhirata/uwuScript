@@ -1,11 +1,12 @@
 const {
-  NullType,
   NumType,
   StringType,
   BooleanType,
   ArrayType,
   DictionaryType,
 } = require("../semantics/builtins");
+
+const { FunctionObject } = require("../ast");
 
 function doCheck(condition, message) {
   if (!condition) {
@@ -51,7 +52,6 @@ function isFunction(entity) {
 }
 
 function isNumber(exp) {
-  //console.log("[EXP TYPE]: ", exp.type, "[NUM TYPE]: ", NumType);
   doCheck(
     JSON.stringify(exp.type) === JSON.stringify(NumType),
     "Not a Numbwer ಥ_ಥ"

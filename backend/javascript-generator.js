@@ -19,32 +19,19 @@ const prettyJs = require("pretty-js");
 const {
   Argument,
   ArrayExpression,
-  ArrayType,
   AssignmentStatement,
   BinaryExpression,
   BooleanLiteral,
-  BooleanType,
   BreakStatement,
   Call,
   DictionaryExpression,
-  DictionaryType,
   ForStatement,
   Func,
   IfStatement,
-  KeyValPair,
-  LargeBlock,
-  Null,
-  NullType,
   NumericLiteral,
-  NumType,
-  Parameter,
-  Program,
   ReturnStatement,
   StringLiteral,
-  StringType,
-  SubscriptedExpression,
   TernaryStatement,
-  TinyBlock,
   UnaryExpression,
   VariableDeclaration,
   Variable,
@@ -80,12 +67,6 @@ const builtin = {
   substwing([s, i, n]) {
     return `${s}.substring(${i}, ${n})`;
   },
-  concat([s, t]) {
-    return `${s}.concat(${t})`;
-  },
-  exit(code) {
-    return `process.exit(${code})`;
-  },
 };
 
 function generateBlock(block) {
@@ -106,7 +87,7 @@ ArrayExpression.prototype.gen = function() {
 };
 
 AssignmentStatement.prototype.gen = function() {
-  return `${this.target.gen()} = ${this.source.gen()}`;
+  return `${this.targets.gen()} = ${this.sources.gen()}`;
 };
 
 BinaryExpression.prototype.gen = function() {

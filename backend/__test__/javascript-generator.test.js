@@ -92,6 +92,12 @@ const fixture = {
     String.raw`2 < 3 ? pwint(2) ewse pwint(3)`,
     String.raw`(2 < 3) ? console.log(2) : console.log(3);`,
   ],
+
+  length: [
+    String.raw`length("hello")
+  `,
+    String.raw`"hello".length`,
+  ],
 };
 
 describe("The JavaScript generator", () => {
