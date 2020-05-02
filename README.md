@@ -15,6 +15,10 @@ Presentation Slides: [Presentation Slides](https://docs.google.com/presentation/
 * Statically Typed
 * For-in/While Loops
 
+### Optimizations
+* Constant Folding - to compute simple expressions at compiler time
+* Strength Reduction - optimizations to reduce cost of more expensive Unary and Binary Operations
+
 ### Types
 * Boowean/Boow
 * Stwing
