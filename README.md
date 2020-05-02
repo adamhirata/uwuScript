@@ -7,6 +7,8 @@ uwuScript is a cute scripting language that is designed to be fun (and possibly 
 
 uwuScript Website: https://adamhirata.github.io/uwuScript/
 
+Presentation Slides: [Presentation Slides](https://docs.google.com/presentation/d/1s8D6IZ10MGerqN5GDT4IIegXw1eyxDTES7N2mcyl28s/edit?usp=sharing "Presentation Slides")
+
 ## Features
 * Cuteness
 * Scripting Language
